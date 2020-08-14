@@ -1,0 +1,3 @@
+include ':libjetpackex'
+include ':app'
+rootProject.name = "jetpack-expand"
