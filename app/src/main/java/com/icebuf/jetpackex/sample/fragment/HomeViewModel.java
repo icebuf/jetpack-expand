@@ -2,7 +2,6 @@ package com.icebuf.jetpackex.sample.fragment;
 
 import android.app.Application;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableList;
@@ -27,17 +26,12 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     public ObservableList<TestItem> getTestList() {
-        return mRepository.getTestList(getApplication());
+        return mRepository.getTestList(getApplication(), "testcase");
     }
 
     public void onItemClick(View view, int position) {
         int destination = getTestList().get(position).getDestination();
         Navigation.findNavController(view).navigate(destination);
-//        Toast.makeText(view.getContext(), "onItemClick():: " + position, Toast.LENGTH_LONG).show();
-    }
-
-    public void onCheckChanged(View view, boolean checked) {
-        Toast.makeText(view.getContext(), "onCheckChanged():: " + checked, Toast.LENGTH_LONG).show();
     }
 
 }

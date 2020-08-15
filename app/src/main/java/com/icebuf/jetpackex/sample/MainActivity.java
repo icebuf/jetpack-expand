@@ -17,7 +17,6 @@ public class MainActivity extends DBActivity<MainViewModel> {
 
         NavController controller = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, controller);
-
     }
 
     @NonNull

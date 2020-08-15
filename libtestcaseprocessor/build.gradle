@@ -1,0 +1,13 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':libtestcase')
+
+    implementation 'com.alibaba:fastjson:1.2.59'
+    implementation 'com.google.auto.service:auto-service:1.0-rc6'
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc6'
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"

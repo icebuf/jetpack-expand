@@ -5,6 +5,7 @@
         <variable
             name="vm"
             type="com.icebuf.jetpackex.sample.fragment.RadioViewModel" />
+        <import type="com.icebuf.jetpackex.sample.pojo.Sex" />
     </data>
 
     <ScrollView
@@ -35,29 +36,129 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="20dp"
-                android:onValueChanged="@{(view, value)->vm.onColorChanged(value)}"
-                android:checkedValue="@{@color/red}"
-                android:layout_gravity="center_horizontal">
+                app:onValueChanged="@{(view, value)->vm.onColorChanged(value)}"
+                app:checkedValue="@{@color/red}">
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:value="@{@color/red}"
+                    app:value="@{@color/red}"
                     android:text="Red" />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:value="@{@color/blue}"
+                    app:value="@{@color/blue}"
                     android:text="Blue" />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:value="@{@color/yellow}"
+                    app:value="@{@color/yellow}"
                     android:text="Yellow" />
 
             </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="使用枚举当作value的radioGroup"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@{vm.sex}"
+                app:textFormat="@{@string/xiaomin_sex}"/>
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:value="@{Sex.MAN}"
+                    android:text="Man" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:value="@{Sex.FEMALE}"
+                    android:text="Female" />
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="使用支持RadioButton嵌套的NestRadioGroup"/>
+
+            <com.icebuf.jetpackex.widget.NestedRadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GroupA-ChildA" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:value="@{Sex.FEMALE}"
+                        android:text="GroupA-ChildB" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="GroupB-ChildA" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="GroupB-ChildB" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GroupA-ChildC" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GroupA-ChildD" />
+
+            </com.icebuf.jetpackex.widget.NestedRadioGroup>
 
         </LinearLayout>
 

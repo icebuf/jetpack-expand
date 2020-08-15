@@ -24,15 +24,15 @@ public @interface RecyclerViewItem {
      * 布局文件应当支持dataBinding的写法
      * 如下所示：
      * <code>
-     *  <layout xmlns:android="http://schemas.android.com/apk/res/android">
-     *      <data>
-     *          <variable
+     *  &lt;layout xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+     *      &lt;data&gt;
+     *          &lt;variable
      *              name="student"
-     *              type="com.xxx.Student" />
-     *      </data>
-     *      <TextView
-     *          android:text="@{student.name}"/>
-     *  </layout>
+     *              type="com.xxx.Student" /&gt;
+     *      &lt;/data>
+     *      &lt;TextView
+     *          android:text="@{student.name}"/&gt;
+     *  &lt;/layout&gt;
      * </code>
      * @return xml布局文件的id
      */

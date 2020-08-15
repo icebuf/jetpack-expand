@@ -11,8 +11,10 @@ import com.icebuf.jetpackex.sample.R;
  * Data: 2020/8/14
  * E-mail：bflyff@hotmail.com
  */
-@RecyclerViewItem(layoutId = R.layout.item_test, variableId = BR.item, viewModelId = BR.vm)
+@RecyclerViewItem(layoutId = R.layout.item_test, variableId = BR.item)
 public class TestItem {
+
+    private int index;
 
     private String name;
 
@@ -42,5 +44,13 @@ public class TestItem {
 
     public int getDestination() {
         return destination;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

@@ -2,12 +2,13 @@ package com.icebuf.jetpackex.databinding.adapter;
 
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.ViewParent;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingListener;
+import androidx.databinding.InverseBindingMethod;
+import androidx.databinding.InverseBindingMethods;
+
+import com.icebuf.jetpackex.widget.NestedRadioGroup;
 
 import java.util.Objects;
 
@@ -17,36 +18,16 @@ import java.util.Objects;
  * @author IceTang
  * @version 1.0  Data: 2020/8/5 E-mail：bflyff@hotmail.com
  */
-public class RadioGroupBindingAdapter {
+@InverseBindingMethods({
+        @InverseBindingMethod(type = NestedRadioGroup.class, attribute = "android:checkedButton", method = "getCheckedId"),
+})
+public class NestRadioGroupBindingAdapter {
 
-    private static final String TAG = RadioGroupBindingAdapter.class.getSimpleName();
+    private static final String TAG = NestRadioGroupBindingAdapter.class.getSimpleName();
 
     private static final int KEY_VALUE_MAP = -100;
 
     private static final int KEY_VALUE_CHECK = -101;
-
-    /**
-     * Sets value.
-     *
-     * @param <T>         多样化存储数据的类型
-     * @param radioButton 绑定value的radioButton
-     * @param value       该radioButton所表示的值
-     */
-    @BindingAdapter(value = {"value"})
-    public static <T> void setValue(RadioButton radioButton, T value) {
-        ViewParent parent = radioButton.getParent();
-        if (parent instanceof RadioGroup) {
-            RadioGroup group = (RadioGroup) parent;
-            SparseArray<T> valueArray = getValueArray(group);
-            valueArray.append(radioButton.getId(), value);
-
-            Boolean check = (Boolean) group.getTag(KEY_VALUE_CHECK);
-            if(check != null && check) {
-                group.check(radioButton.getId());
-            }
-        }
-    }
-
 
     /**
      * Sets checked value.
@@ -56,7 +37,7 @@ public class RadioGroupBindingAdapter {
      * @param value the value
      */
     @BindingAdapter(value = {"checkedValue"})
-    public static <T> void setCheckedValue(RadioGroup group, T value) {
+    public static <T> void setCheckedValue(NestedRadioGroup group, T value) {
         if(value == null) {
             group.check(-1);
             return;
@@ -79,7 +60,7 @@ public class RadioGroupBindingAdapter {
         Log.w(TAG, "value " + value + " for radioButton id not found!");
     }
 
-    private static <T> SparseArray<T>  getValueArray(RadioGroup group) {
+    private static <T> SparseArray<T>  getValueArray(NestedRadioGroup group) {
         Object object = group.getTag(KEY_VALUE_MAP);
         if(object instanceof SparseArray) {
             return (SparseArray<T>) object;
@@ -98,8 +79,8 @@ public class RadioGroupBindingAdapter {
      * @param attrChange the attr change
      */
     @BindingAdapter(value = {"onValueChanged", "valueAttrChanged"}, requireAll = false)
-    public static <T> void setListeners(RadioGroup view, final OnValueChangedListener<T> listener,
-                                    final InverseBindingListener attrChange) {
+    public static <T> void setListeners(NestedRadioGroup view, final OnValueChangedListener<T> listener,
+                                        final InverseBindingListener attrChange) {
         if (attrChange == null) {
             setOnValueChangeListener(view, listener);
         } else {
@@ -112,10 +93,10 @@ public class RadioGroupBindingAdapter {
         }
     }
 
-    private static <T> void setOnValueChangeListener(RadioGroup view, OnValueChangedListener<T> listener) {
-        view.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+    private static <T> void setOnValueChangeListener(NestedRadioGroup view, OnValueChangedListener<T> listener) {
+        view.setOnCheckedChangeListener(new NestedRadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
+            public void onCheckedChanged(NestedRadioGroup group, int checkedId) {
                 SparseArray<T> valueArray = getValueArray(group);
                 if(listener != null) {
                     listener.onValueChanged(group, valueArray.get(checkedId));
@@ -124,7 +105,7 @@ public class RadioGroupBindingAdapter {
             }
         });
         SparseArray<T> valueArray = getValueArray(view);
-        T value = valueArray.get(view.getCheckedRadioButtonId());
+        T value = valueArray.get(view.getCheckedId());
         if(value != null) {
             listener.onValueChanged(view, value);
         }
@@ -143,6 +124,6 @@ public class RadioGroupBindingAdapter {
          * @param group the group
          * @param value the value
          */
-        void onValueChanged(RadioGroup group, T value);
+        void onValueChanged(NestedRadioGroup group, T value);
     }
 }

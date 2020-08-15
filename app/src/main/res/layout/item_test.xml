@@ -2,9 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            name="vm"
-            type="com.icebuf.jetpackex.sample.fragment.HomeViewModel" />
-        <variable
             name="item"
             type="com.icebuf.jetpackex.sample.pojo.TestItem" />
     </data>
@@ -28,11 +25,6 @@
             android:textSize="18sp"
             android:text="@{item.description}"
             android:layout_marginTop="10dp"/>
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{(v, checked)->vm.onCheckChanged(v, checked)}" />
 
     </LinearLayout>
 </layout>

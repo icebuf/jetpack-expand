@@ -14,9 +14,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adapterDataSet="@{vm.testList}"
-            android:adapterViewModel="@{vm}"
-            android:onItemClick="@{(view, item, pos)->vm.onItemClick(item, pos)}"
+            app:adapterDataSet="@{vm.testList}"
+            app:adapterViewModel="@{vm}"
+            app:onItemClick="@{(view, item, pos)->vm.onItemClick(item, pos)}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     </FrameLayout>

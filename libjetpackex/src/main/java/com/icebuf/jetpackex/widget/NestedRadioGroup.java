@@ -10,12 +10,19 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 /**
- * Created by shihao <1406504841@qq.com> on 2017/2/10.13:15
+ * The type Nested Radio group.
+ *
+ * Copy by {@link RadioGroup} and support nest other layout.
+ * When child is a RadioGroup or NestedRadioGroup then stop check it, so the child
+ * even can be the other RadioGroup or NestedRadioGroup.
+ *
+ * @author IceTang
+ * @version 1.0  Data: 2020/8/5 E-mail：bflyff@hotmail.com
  */
-
-public class NestRadioGroup extends LinearLayout {
+public class NestedRadioGroup extends LinearLayout {
     // holds the checked id; the selection is empty by default
     private int mCheckedId = -1;
     // tracks children radio buttons checked state
@@ -25,20 +32,20 @@ public class NestRadioGroup extends LinearLayout {
     private OnCheckedChangeListener mOnCheckedChangeListener;
     private PassThroughHierarchyChangeListener mPassThroughListener;
 
-    public NestRadioGroup(Context context) {
+    public NestedRadioGroup(Context context) {
         this(context, null);
     }
 
-    public NestRadioGroup(Context context, AttributeSet attrs) {
+    public NestedRadioGroup(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public NestRadioGroup(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NestedRadioGroup(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public NestRadioGroup(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public NestedRadioGroup(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
@@ -85,7 +92,7 @@ public class NestRadioGroup extends LinearLayout {
                 mProtectFromCheckedChange = false;
                 setCheckedId(button.getId());
             }
-        } else if (child instanceof ViewGroup) {
+        } else if (checkNestedChild(child)) {
             ViewGroup view = (ViewGroup) child;
             for (int i = 0; i < view.getChildCount(); i++) {
                 setViewState(view.getChildAt(i));
@@ -196,7 +203,7 @@ public class NestRadioGroup extends LinearLayout {
 
     @Override
     public CharSequence getAccessibilityClassName() {
-        return NestRadioGroup.class.getName();
+        return NestedRadioGroup.class.getName();
     }
 
     /**
@@ -284,7 +291,7 @@ public class NestRadioGroup extends LinearLayout {
          * @param group     the group in which the checked radio button has changed
          * @param checkedId the unique identifier of the newly checked radio button
          */
-        void onCheckedChanged(NestRadioGroup group, int checkedId);
+        void onCheckedChanged(NestedRadioGroup group, int checkedId);
     }
 
     private class CheckedStateTracker implements CompoundButton.OnCheckedChangeListener {
@@ -352,7 +359,7 @@ public class NestRadioGroup extends LinearLayout {
             }
             ((RadioButton) child).setOnCheckedChangeListener(
                     mChildOnCheckedChangeListener);
-        } else if (child instanceof ViewGroup) {
+        } else if (checkNestedChild(child)) {
             ViewGroup view = (ViewGroup) child;
             for (int i = 0; i < view.getChildCount(); i++) {
                 setListener(view.getChildAt(i));
@@ -369,11 +376,17 @@ public class NestRadioGroup extends LinearLayout {
     private void removeListener(View child) {
         if (child instanceof RadioButton) {
             ((RadioButton) child).setOnCheckedChangeListener(null);
-        } else if (child instanceof ViewGroup) {
+        } else if (checkNestedChild(child)) {
             ViewGroup view = (ViewGroup) child;
             for (int i = 0; i < view.getChildCount(); i++) {
                 removeListener(view.getChildAt(i));
             }
         }
+    }
+
+    private boolean checkNestedChild(View child) {
+        return child instanceof ViewGroup
+                && !(child instanceof RadioGroup)
+                && !(child instanceof NestedRadioGroup);
     }
 }

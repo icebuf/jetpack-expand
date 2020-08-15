@@ -26,73 +26,71 @@ import java.util.List;
  *
  */
 @BindingMethods({
-        @BindingMethod(type = RecyclerView.class, attribute = "app:layoutManager",
-                method = "setLayoutManager"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:adapter",
+        @BindingMethod(type = RecyclerView.class, attribute = "adapter",
                 method = "setAdapter"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:itemAnimator",
+        @BindingMethod(type = RecyclerView.class, attribute = "itemAnimator",
                 method = "setItemAnimator"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:childDrawingOrder",
+        @BindingMethod(type = RecyclerView.class, attribute = "childDrawingOrder",
                 method = "setChildDrawingOrderCallback"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:clipToPadding",
+        @BindingMethod(type = RecyclerView.class, attribute = "clipToPadding",
                 method = "setClipToPadding"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:edgeEffectFactory",
+        @BindingMethod(type = RecyclerView.class, attribute = "edgeEffectFactory",
                 method = "setEdgeEffectFactory"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:hasFixedSize",
+        @BindingMethod(type = RecyclerView.class, attribute = "hasFixedSize",
                 method = "setHasFixedSize"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:itemViewCacheSize",
+        @BindingMethod(type = RecyclerView.class, attribute = "itemViewCacheSize",
                 method = "setItemViewCacheSize"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:nestedScrollingEnabled",
+        @BindingMethod(type = RecyclerView.class, attribute = "nestedScrollingEnabled",
                 method = "setNestedScrollingEnabled"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:onFlingListener",
+        @BindingMethod(type = RecyclerView.class, attribute = "onFlingListener",
                 method = "setOnFlingListener"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:preserveFocusAfterLayout",
+        @BindingMethod(type = RecyclerView.class, attribute = "preserveFocusAfterLayout",
                 method = "setPreserveFocusAfterLayout"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:recycledViewPool",
+        @BindingMethod(type = RecyclerView.class, attribute = "recycledViewPool",
                 method = "setRecycledViewPool"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:scrollingTouchSlop",
+        @BindingMethod(type = RecyclerView.class, attribute = "scrollingTouchSlop",
                 method = "setScrollingTouchSlop"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:recyclerListener",
+        @BindingMethod(type = RecyclerView.class, attribute = "recyclerListener",
                 method = "setRecyclerListener"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:viewCacheExtension",
+        @BindingMethod(type = RecyclerView.class, attribute = "viewCacheExtension",
                 method = "setViewCacheExtension"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:accessibilityDelegateCompat",
+        @BindingMethod(type = RecyclerView.class, attribute = "accessibilityDelegateCompat",
                 method = "setAccessibilityDelegateCompat"),
-        @BindingMethod(type = RecyclerView.class, attribute = "android:scrollTo",
+        @BindingMethod(type = RecyclerView.class, attribute = "scrollTo",
                 method = "scrollToPosition"),
 })
 @InverseBindingMethods({
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "app:layoutManager",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "layoutManager",
                 method = "getLayoutManager"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:adapter",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "adapter",
                 method = "getAdapter"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:itemAnimator",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "itemAnimator",
                 method = "getItemAnimator"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:childDrawingOrder",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "childDrawingOrder",
                 method = "getChildDrawingOrderCallback"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:clipToPadding",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "clipToPadding",
                 method = "getClipToPadding"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:edgeEffectFactory",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "edgeEffectFactory",
                 method = "getEdgeEffectFactory"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:hasFixedSize",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "hasFixedSize",
                 method = "getHasFixedSize"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:itemViewCacheSize",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "itemViewCacheSize",
                 method = "getItemViewCacheSize"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:nestedScrollingEnabled",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "nestedScrollingEnabled",
                 method = "getNestedScrollingEnabled"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:onFlingListener",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "onFlingListener",
                 method = "getOnFlingListener"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:preserveFocusAfterLayout",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "preserveFocusAfterLayout",
                 method = "getPreserveFocusAfterLayout"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:recycledViewPool",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "recycledViewPool",
                 method = "getRecycledViewPool"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:scrollingTouchSlop",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "scrollingTouchSlop",
                 method = "getScrollingTouchSlop"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:recyclerListener",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "recyclerListener",
                 method = "getRecyclerListener"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:viewCacheExtension",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "viewCacheExtension",
                 method = "getViewCacheExtension"),
-        @InverseBindingMethod(type = RecyclerView.class, attribute = "android:accessibilityDelegateCompat",
+        @InverseBindingMethod(type = RecyclerView.class, attribute = "accessibilityDelegateCompat",
                 method = "getAccessibilityDelegateCompat"),
 })
 public class RecyclerViewBindingAdapter {
@@ -115,19 +113,19 @@ public class RecyclerViewBindingAdapter {
      *      type="com.xxx.MainViewModel" />
      *
      *  <androidx.recyclerview.widget.RecyclerView
-     *      android:adapterDataSet="@{viewModel.strings}" />
+     *      app:adapterDataSet="@{viewModel.strings}" />
      * </code>
      *
      * @param view 要绑定的RecyclerView
      * @param data 数据集合
      * @param <T> 数据类型
      */
-    @BindingAdapter(value = "android:adapterDataSet", requireAll = false)
-    public static <T> void setAdapterDataSet(RecyclerView view, ObservableList<T> data) {
+    @BindingAdapter(value = "adapterDataSet", requireAll = false)
+    public static <T> void setAdapterDataSet(RecyclerView view, List<T> data) {
         view.setAdapter(new RecyclerViewAdapter(data));
     }
 
-    @BindingAdapter(value = "android:adapterViewModel", requireAll = false)
+    @BindingAdapter(value = "adapterViewModel", requireAll = false)
     public static void setAdapterViewModel(RecyclerView view, ViewModel viewModel) {
         RecyclerView.Adapter<?> adapter = view.getAdapter();
         if(adapter instanceof RecyclerViewAdapter) {
@@ -136,7 +134,7 @@ public class RecyclerViewBindingAdapter {
         }
     }
 
-    @BindingAdapter(value = "android:itemAnimator", requireAll = false)
+    @BindingAdapter(value = "itemAnimator", requireAll = false)
     public static <T> void setItemAnimator(RecyclerView view, String className) {
         try {
             Class<?> clazz = Class.forName(className);
@@ -149,7 +147,7 @@ public class RecyclerViewBindingAdapter {
         }
     }
 
-    @BindingAdapter(value = "android:onItemClick", requireAll = false)
+    @BindingAdapter(value = "onItemClick", requireAll = false)
     public static <T> void setOnItemClick(RecyclerView view, OnItemClickListener listener) {
         RecyclerView.Adapter<?> adapter = view.getAdapter();
         if(adapter instanceof RecyclerViewAdapter) {
@@ -158,7 +156,7 @@ public class RecyclerViewBindingAdapter {
         }
     }
 
-    @BindingAdapter(value = "android:onItemLongClick", requireAll = false)
+    @BindingAdapter(value = "onItemLongClick", requireAll = false)
     public static <T> void setOnItemLongClick(RecyclerView view, OnItemLongClickListener listener) {
         RecyclerView.Adapter<?> adapter = view.getAdapter();
         if(adapter instanceof RecyclerViewAdapter) {
@@ -169,7 +167,7 @@ public class RecyclerViewBindingAdapter {
 
     /**
      * 绑定列表底部与视图同步
-     * 当{@link RecyclerView}的标签<code>android:onScrollToPosition</code>的值设置为
+     * 当{@link RecyclerView}的标签<code>onScrollToPosition</code>的值设置为
      * {@link ObservableList}的时候，用来监听当{@link ObservableList}大小发生变化时可以
      * 自动当滑动到对应位置
      *
@@ -177,34 +175,34 @@ public class RecyclerViewBindingAdapter {
      * @param observableList {@link ObservableList}
      * @param <T> 数组元素类型
      */
-    @BindingAdapter(value = "android:onScrollToPosition", requireAll = false)
+    @BindingAdapter(value = "onScrollToPosition", requireAll = false)
     public static <T> void onScrollToPosition(RecyclerView view, ObservableList<T> observableList) {
         onScrollToPosition(view, observableList.size() - 1);
     }
 
-    @BindingAdapter(value = "android:onScrollToPosition", requireAll = false)
+    @BindingAdapter(value = "onScrollToPosition", requireAll = false)
     public static void onScrollToPosition(RecyclerView view, ObservableInt observable) {
         onScrollToPosition(view, observable.get());
     }
 
-    @BindingAdapter(value = "android:onScrollToPosition", requireAll = false)
+    @BindingAdapter(value = "onScrollToPosition", requireAll = false)
     public static <T extends List<?>> void onScrollToPosition(RecyclerView view, LiveData<T> liveData) {
         if(liveData.getValue() != null) {
             onScrollToPosition(view, liveData.getValue().size() - 1);
         }
     }
 
-    @BindingAdapter(value = "android:onSmoothScrollToPosition", requireAll = false)
+    @BindingAdapter(value = "onSmoothScrollToPosition", requireAll = false)
     public static <T> void onSmoothScrollToPosition(RecyclerView view, ObservableList<T> observableList) {
         onSmoothScrollToPosition(view, observableList.size() - 1);
     }
 
-    @BindingAdapter(value = "android:onSmoothScrollToPosition", requireAll = false)
+    @BindingAdapter(value = "onSmoothScrollToPosition", requireAll = false)
     public static void onSmoothScrollToPosition(RecyclerView view, ObservableInt observable) {
         onSmoothScrollToPosition(view, observable.get());
     }
 
-    @BindingAdapter(value = "android:onSmoothScrollToPosition", requireAll = false)
+    @BindingAdapter(value = "onSmoothScrollToPosition", requireAll = false)
     public static <T extends List<?>> void onSmoothScrollToPosition(RecyclerView view, LiveData<T> liveData) {
         if(liveData.getValue() != null) {
             onSmoothScrollToPosition(view, liveData.getValue().size() - 1);
