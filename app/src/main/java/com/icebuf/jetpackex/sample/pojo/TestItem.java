@@ -2,7 +2,7 @@ package com.icebuf.jetpackex.sample.pojo;
 
 import androidx.databinding.library.baseAdapters.BR;
 
-import com.icebuf.jetpackex.databinding.RecyclerViewItem;
+import com.icebuf.jetpackex.RecyclerViewItem;
 import com.icebuf.jetpackex.sample.R;
 
 /**

@@ -8,4 +8,8 @@
 
     <string name="test_name_recycle_view">RecycleView</string>
     <string name="test_desc_recycle_view">万能Adapter，xml注入数据，Item回调ViewModel</string>
+    <string name="sex_man">男</string>
+    <string name="sex_female">女</string>
+    <string name="update_news_count">更新了%d条新闻</string>
+    <string name="already_up_to_date">已经是最新了</string>
 </resources>

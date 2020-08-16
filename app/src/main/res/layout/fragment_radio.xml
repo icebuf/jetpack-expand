@@ -77,7 +77,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="20dp"
+                app:checkedValue="@{Sex.MAN}"
+                app:onValueChanged="@{(view, value)->vm.onSexChanged(view, value)}">
 
                 <RadioButton
                     android:layout_width="wrap_content"

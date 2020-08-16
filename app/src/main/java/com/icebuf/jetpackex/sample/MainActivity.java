@@ -1,6 +1,7 @@
 package com.icebuf.jetpackex.sample;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -33,5 +34,17 @@ public class MainActivity extends DBActivity<MainViewModel> {
     @Override
     protected int getVariableId() {
         return BR.vm;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Navigation.findNavController(this, R.id.nav_host_fragment).popBackStack();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }

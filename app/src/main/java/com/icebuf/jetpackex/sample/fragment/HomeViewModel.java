@@ -9,7 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.navigation.Navigation;
 
 import com.icebuf.jetpackex.sample.pojo.TestItem;
-import com.icebuf.jetpackex.sample.repo.TestListRepository;
+import com.icebuf.jetpackex.sample.repo.TestCaseRepository;
 
 /**
  * @author IceTang
@@ -19,7 +19,7 @@ import com.icebuf.jetpackex.sample.repo.TestListRepository;
  */
 public class HomeViewModel extends AndroidViewModel {
 
-    private TestListRepository mRepository = TestListRepository.getInstance();
+    private TestCaseRepository mRepository = TestCaseRepository.getInstance();
 
     public HomeViewModel(@NonNull Application application) {
         super(application);

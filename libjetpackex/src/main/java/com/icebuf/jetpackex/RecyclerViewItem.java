@@ -1,4 +1,4 @@
-package com.icebuf.jetpackex.databinding;
+package com.icebuf.jetpackex;
 
 import androidx.annotation.LayoutRes;
 import androidx.lifecycle.ViewModel;

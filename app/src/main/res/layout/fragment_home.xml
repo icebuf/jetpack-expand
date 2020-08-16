@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:adapterDataSet="@{vm.testList}"
-            app:adapterViewModel="@{vm}"
+            app:adapterTag="@{vm}"
             app:onItemClick="@{(view, item, pos)->vm.onItemClick(item, pos)}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 

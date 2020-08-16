@@ -1,23 +1,27 @@
 package com.icebuf.jetpackex.sample.pojo;
 
-import androidx.databinding.BindingConversion;
+import android.content.Context;
+
+import androidx.annotation.StringRes;
+
+import com.icebuf.jetpackex.sample.R;
 
 public enum Sex {
-    MAN("男"),
-    FEMALE("女");
+    MAN(R.string.sex_man),
+    FEMALE(R.string.sex_female);
 
-    private String value;
+    @StringRes
+    private int value;
 
-    Sex(String str) {
-        value = str;
+    Sex(int value) {
+        this.value = value;
     }
 
-    public String getValue() {
+    public int getValue() {
         return value;
     }
 
-    @BindingConversion
-    public static String sex2String(Sex sex) {
-        return sex == null ? "" : sex.getValue();
+    public String getValueString(Context context) {
+        return context.getString(value);
     }
 }

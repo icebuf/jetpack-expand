@@ -1,20 +1,22 @@
 package com.icebuf.jetpackex.databinding.adapter;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.BindingMethod;
 import androidx.databinding.BindingMethods;
+import androidx.databinding.InverseBindingListener;
 import androidx.databinding.InverseBindingMethod;
 import androidx.databinding.InverseBindingMethods;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableInt;
 import androidx.databinding.ObservableList;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.icebuf.jetpackex.databinding.OnItemClickListener;
-import com.icebuf.jetpackex.databinding.OnItemLongClickListener;
+import com.icebuf.jetpackex.OnItemClickListener;
+import com.icebuf.jetpackex.OnItemLongClickListener;
 import com.icebuf.jetpackex.databinding.RecyclerViewAdapter;
+import com.icebuf.jetpackex.util.ReflectUtil;
 
 import java.util.List;
 
@@ -95,6 +97,9 @@ import java.util.List;
 })
 public class RecyclerViewBindingAdapter {
 
+    private static final int KEY_ITEM_CLICK = -1000;
+    private static final int KEY_ITEM_LONG_CLICK = -1001;
+
     /**
      * 将数据集直接通过{@link RecyclerViewAdapter}绑定到RecyclerView
      * 案例如下：
@@ -120,17 +125,62 @@ public class RecyclerViewBindingAdapter {
      * @param data 数据集合
      * @param <T> 数据类型
      */
-    @BindingAdapter(value = "adapterDataSet", requireAll = false)
+    @BindingAdapter(value = "adapterDataSet")
     public static <T> void setAdapterDataSet(RecyclerView view, List<T> data) {
-        view.setAdapter(new RecyclerViewAdapter(data));
-    }
-
-    @BindingAdapter(value = "adapterViewModel", requireAll = false)
-    public static void setAdapterViewModel(RecyclerView view, ViewModel viewModel) {
         RecyclerView.Adapter<?> adapter = view.getAdapter();
         if(adapter instanceof RecyclerViewAdapter) {
             RecyclerViewAdapter recyclerViewAdapter = (RecyclerViewAdapter) adapter;
-            recyclerViewAdapter.setViewModel(viewModel);
+            recyclerViewAdapter.updateDataSet(data);
+        } else {
+            RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(data);
+            OnItemClickListener clickListener = (OnItemClickListener) view.getTag(KEY_ITEM_CLICK);
+            OnItemLongClickListener longClickListener = (OnItemLongClickListener) view.getTag(KEY_ITEM_LONG_CLICK);
+            recyclerViewAdapter.setOnItemClickListener(clickListener);
+            recyclerViewAdapter.setOnItemLongClickListener(longClickListener);
+            view.setAdapter(recyclerViewAdapter);
+        }
+    }
+
+    @BindingAdapter(value = "dropUpScrollListener")
+    public static <T> void setDropUpScrollListener(RecyclerView view, String clazzName) {
+        RecyclerView.OnScrollListener listener = ReflectUtil.newInstance(clazzName);
+        view.addOnScrollListener(listener);
+    }
+
+    @BindingAdapter(value = {"dropDownScrollListener", "dropDownAttrScrollListener"}, requireAll = false)
+    public static <T> void setDropDownScrollListener(RecyclerView view,
+                                                     RecyclerView.OnScrollListener listener,
+                                                     InverseBindingListener attrChange) {
+
+        if (attrChange == null) {
+            view.addOnScrollListener(listener);
+        } else {
+            view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    if (listener != null) {
+                        listener.onScrollStateChanged(recyclerView, newState);
+                    }
+                    attrChange.onChange();
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    if (listener != null) {
+                        listener.onScrolled(recyclerView, dx, dy);
+                    }
+                    attrChange.onChange();
+                }
+            });
+        }
+    }
+
+    @BindingAdapter(value = "adapterTag")
+    public static void setAdapterViewModel(RecyclerView view, Object object) {
+        RecyclerView.Adapter<?> adapter = view.getAdapter();
+        if(adapter instanceof RecyclerViewAdapter) {
+            RecyclerViewAdapter recyclerViewAdapter = (RecyclerViewAdapter) adapter;
+            recyclerViewAdapter.setTag(object);
         }
     }
 
@@ -150,7 +200,9 @@ public class RecyclerViewBindingAdapter {
     @BindingAdapter(value = "onItemClick", requireAll = false)
     public static <T> void setOnItemClick(RecyclerView view, OnItemClickListener listener) {
         RecyclerView.Adapter<?> adapter = view.getAdapter();
-        if(adapter instanceof RecyclerViewAdapter) {
+        if(adapter == null) {
+            view.setTag(KEY_ITEM_CLICK, listener);
+        } else if(adapter instanceof RecyclerViewAdapter) {
             RecyclerViewAdapter recyclerViewAdapter = (RecyclerViewAdapter) adapter;
             recyclerViewAdapter.setOnItemClickListener(listener);
         }
@@ -159,7 +211,9 @@ public class RecyclerViewBindingAdapter {
     @BindingAdapter(value = "onItemLongClick", requireAll = false)
     public static <T> void setOnItemLongClick(RecyclerView view, OnItemLongClickListener listener) {
         RecyclerView.Adapter<?> adapter = view.getAdapter();
-        if(adapter instanceof RecyclerViewAdapter) {
+        if(adapter == null) {
+            view.setTag(KEY_ITEM_LONG_CLICK, listener);
+        } else if(adapter instanceof RecyclerViewAdapter) {
             RecyclerViewAdapter recyclerViewAdapter = (RecyclerViewAdapter) adapter;
             recyclerViewAdapter.setOnItemLongClickListener(listener);
         }

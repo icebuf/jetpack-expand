@@ -1,9 +1,12 @@
 package com.icebuf.jetpackex.sample.fragment;
 
 import android.util.Log;
+import android.view.View;
 
+import androidx.databinding.BindingConversion;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.icebuf.jetpackex.sample.pojo.Sex;
@@ -18,7 +21,9 @@ public class RadioViewModel extends ViewModel {
 
     public ObservableInt backgroundColor = new ObservableInt();
 
-    private ObservableField<Sex> sex = new ObservableField<>();
+    private ObservableField<String> xiaomingSex = new ObservableField<>();
+
+    private MutableLiveData<Sex> sexMutableLiveData = new MutableLiveData<>();
 
     public ObservableInt getBackgroundColor() {
         return backgroundColor;
@@ -28,12 +33,22 @@ public class RadioViewModel extends ViewModel {
         backgroundColor.set((Integer) value);
     }
 
-    public ObservableField<Sex> getSex() {
-        return sex;
+    public ObservableField<String> getSex() {
+        return xiaomingSex;
     }
 
-    public void onSexChanged(Object value) {
-        sex.set((Sex) value);
+    public MutableLiveData<Sex> getSexMutableLiveData() {
+        return sexMutableLiveData;
+    }
+
+    public void onSexChanged(View view, Object value) {
+        Sex sex = (Sex) value;
+        xiaomingSex.set(view.getResources().getString(sex.getValue()));
         Log.e("TAG", "onSexChanged():: " + value);
+    }
+
+    @BindingConversion
+    public static <T> T sex2String(ObservableField<T> observableField) {
+        return observableField.get();
     }
 }

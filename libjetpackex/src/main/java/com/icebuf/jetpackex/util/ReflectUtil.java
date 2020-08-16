@@ -1,7 +1,13 @@
 package com.icebuf.jetpackex.util;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author IceTang
@@ -47,4 +53,33 @@ public class ReflectUtil {
         }
     }
 
+    public static <T> T newInstance(String clazzName, Object ... objects) {
+        try {
+            return newInstance(Class.forName(clazzName), objects);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public static <T> T newInstance(Class<?> clazz, Object ... objects) {
+        if (clazz.isAssignableFrom(RecyclerView.OnScrollListener.class)) {
+            try {
+                if (objects == null || objects.length <= 0) {
+                    return (T) clazz.newInstance();
+                }
+                List<Class<?>> clazzList = new ArrayList<>();
+                for (Object object : objects) {
+                    clazzList.add(object.getClass());
+                }
+                Constructor<?> constructor = clazz.getConstructor(clazzList.toArray(new Class[0]));
+                return (T) constructor.newInstance(objects);
+            } catch(NoSuchMethodException
+                    | IllegalAccessException
+                    | InstantiationException
+                    | InvocationTargetException e){
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        throw new RuntimeException("bad class " + clazz.getName());
+    }
 }

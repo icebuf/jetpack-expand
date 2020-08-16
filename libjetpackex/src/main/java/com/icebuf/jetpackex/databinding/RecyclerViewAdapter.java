@@ -10,9 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableList;
 import androidx.databinding.ViewDataBinding;
-import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.icebuf.jetpackex.OnItemClickListener;
+import com.icebuf.jetpackex.OnItemLongClickListener;
+import com.icebuf.jetpackex.RecyclerViewItem;
 import com.icebuf.jetpackex.util.ReflectUtil;
 
 import java.lang.ref.WeakReference;
@@ -51,7 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private Map<Object, BindingItem> mItemMap;
 
-    private ViewModel mViewModel;
+    private Object mTag;
 
     private ItemClickHandler mItemClickHandler = new ItemClickHandler(this);
 
@@ -94,7 +96,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull BindingHolder holder, int position) {
         mItemClickHandler.bindHolder(holder);
-        holder.bindItem(getItem(mItems.get(position)), mViewModel);
+        holder.bindItem(getItem(mItems.get(position)), mTag);
+    }
+
+    public <T> void updateDataSet(List<T> data) {
+        if(mItems != data) {
+            mItems = data;
+            notifyDataSetChanged();
+        }
     }
 
     static class ItemClickHandler implements View.OnClickListener, View.OnLongClickListener {
@@ -111,12 +120,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             mAdapter = new WeakReference<>(adapter);
         }
 
-        public void setOnItemClickListener(OnItemClickListener mClickListener) {
-            this.mClickListener = mClickListener;
+        public void setOnItemClickListener(OnItemClickListener listener) {
+            this.mClickListener = listener;
         }
 
-        public void setOnItemLongClickListener(OnItemLongClickListener mLongClickListener) {
-            this.mLongClickListener = mLongClickListener;
+        public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+            this.mLongClickListener = listener;
         }
 
         public void bindHolder(RecyclerView.ViewHolder holder) {
@@ -244,8 +253,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mItemClickHandler.setOnItemLongClickListener(listener);
     }
 
-    public void setViewModel(ViewModel viewModel) {
-        mViewModel = viewModel;
+    public void setTag(Object object) {
+        mTag = object;
     }
 
     static class BindingHolder extends RecyclerView.ViewHolder {
@@ -257,15 +266,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.binding = binding;
         }
 
-        public void bindItem(BindingItem item, ViewModel viewModel) {
+        public void bindItem(BindingItem item, Object tag) {
             if(item instanceof ObjectItem) {
                 ObjectItem objectItem = (ObjectItem) item;
                 binding.setVariable(item.getVariableId(), objectItem.getObject());
             } else {
                 binding.setVariable(item.getVariableId(), item);
             }
-            if(viewModel != null) {
-                binding.setVariable(item.getViewModelId(), viewModel);
+            if(tag != null) {
+                binding.setVariable(item.getTagId(), tag);
             }
         }
     }
@@ -276,7 +285,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         int getVariableId();
 
-        int getViewModelId();
+        int getTagId();
     }
 
     static class ObjectItem implements BindingItem {
@@ -287,13 +296,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         private int variableId;
 
-        private int viewModelId;
+        private int tagId;
 
-        public ObjectItem(Object object, int viewType, int variableId, int viewModelId) {
+        public ObjectItem(Object object, int viewType, int variableId, int tagId) {
             this.object = object;
             this.viewType = viewType;
             this.variableId = variableId;
-            this.viewModelId = viewModelId;
+            this.tagId = tagId;
         }
 
         public Object getObject() {
@@ -311,8 +320,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         @Override
-        public int getViewModelId() {
-            return viewModelId;
+        public int getTagId() {
+            return tagId;
         }
 
     }

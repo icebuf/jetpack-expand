@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="news"
+            type="com.icebuf.jetpackex.sample.pojo.NewsBean" />
+        <import type="com.icebuf.jetpackex.sample.util.ConvertUtil" />
+        <import type="android.text.TextUtils" />
+        <import type="android.view.View" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@drawable/bg_item_gray">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{news.title}"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:lines="3"
+            android:ellipsize="end"
+            android:layout_marginBottom="20dp"
+            android:layout_toStartOf="@id/iv_pic"
+            />
+
+        <ImageView
+            android:id="@+id/iv_pic"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
+            android:scaleType="fitXY"
+            android:visibility="@{TextUtils.isEmpty(news.picUrl)? View.GONE : View.VISIBLE}"
+            app:imageUrl="@{ConvertUtil.http2HttpsUrl(news.picUrl)}"
+            app:placeHolder="@{@color/gray_light}"
+            app:error="@{@drawable/bg_image_error}"
+            android:layout_marginStart="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{news.source}"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@id/iv_pic"
+            />
+
+    </RelativeLayout>
+
+</layout>

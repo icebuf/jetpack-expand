@@ -28,6 +28,16 @@
         android:id="@+id/recycleFragment"
         android:name="com.icebuf.jetpackex.sample.fragment.RecycleFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_recycle"/>
+        tools:layout="@layout/fragment_recycle">
+        <action
+            android:id="@+id/action_recycleFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newsFragment"
+        android:name="com.icebuf.jetpackex.sample.fragment.NewsFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_news"/>
 
 </navigation>

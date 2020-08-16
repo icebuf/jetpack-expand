@@ -27,18 +27,18 @@ import java.util.Map;
  * Data: 2020/8/14
  * E-mail：bflyff@hotmail.com
  */
-public class TestListRepository {
+public class TestCaseRepository {
 
     private Map<String, ObservableList<TestItem>> testItemsMap;
 
-    private static volatile TestListRepository sInstance;
+    private static volatile TestCaseRepository sInstance;
 
-    private TestListRepository() {}
+    private TestCaseRepository() {}
 
 
-    public static TestListRepository getInstance() {
+    public static TestCaseRepository getInstance() {
         if(sInstance == null) {
-            sInstance = new TestListRepository();
+            sInstance = new TestCaseRepository();
         }
         return sInstance;
     }
@@ -46,8 +46,8 @@ public class TestListRepository {
     public ObservableList<TestItem> getTestList(Context context, String group) {
         if(testItemsMap == null) {
             testItemsMap = new HashMap<>();
+            loadTestItems(context, group);
         }
-        loadTestItems(context, group);
         return testItemsMap.get(group);
     }
 
@@ -74,7 +74,6 @@ public class TestListRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assetManager.close();
         Collections.sort(testItems, new Comparator<TestItem>() {
             @Override
             public int compare(TestItem o1, TestItem o2) {
