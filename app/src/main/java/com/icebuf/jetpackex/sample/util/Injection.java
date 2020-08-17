@@ -1,7 +1,11 @@
 package com.icebuf.jetpackex.sample.util;
 
+import android.content.Context;
+
+import com.icebuf.jetpackex.sample.repo.LocalDataSource;
 import com.icebuf.jetpackex.sample.repo.ToutiaoDataSource;
 import com.icebuf.jetpackex.sample.repo.ToutiaoRepository;
+import com.icebuf.jetpackex.sample.repo.db.NewsDatabase;
 import com.icebuf.jetpackex.sample.rest.ToutiaoApi;
 
 import java.util.concurrent.TimeUnit;
@@ -13,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Injection {
 
-    public static ToutiaoRepository provideToutiaoRepo() {
+    public static ToutiaoRepository provideToutiaoRepo(Context context) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .build();
@@ -25,7 +29,9 @@ public class Injection {
 //                .callbackExecutor(Executors.newSingleThreadExecutor())
                 .build();
         ToutiaoDataSource dataSource = new ToutiaoDataSource(retrofit);
-        return ToutiaoRepository.getInstance(dataSource);
+        NewsDatabase database = NewsDatabase.getInstance(context);
+        LocalDataSource localDataSource = new LocalDataSource(database.topNewsDao());
+        return ToutiaoRepository.getInstance(dataSource, localDataSource);
     }
 
 

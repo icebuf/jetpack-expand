@@ -2,15 +2,16 @@ package com.icebuf.jetpackex.sample.fragment;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.library.baseAdapters.BR;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.icebuf.jetpackex.databinding.DBFragment;
 import com.icebuf.jetpackex.sample.R;
+import com.icebuf.jetpackex.util.IceUtil;
+import com.icebuf.jetpackex.viewmodel.ResultObserver;
 import com.icebuf.testcase.ItemGroup;
 import com.icebuf.testcase.ResItem;
 
@@ -29,22 +30,31 @@ public class RecycleFragment extends DBFragment<RecycleViewModel> {
 //        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 //        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
-        getViewModel().getTopNewsCount().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        getViewModel().getTopNewsCount().observe(getViewLifecycleOwner(), new ResultObserver<Integer>() {
+
             @Override
-            public void onChanged(Integer integer) {
-                if(integer == null) {
-                    return;
+            protected void onLoading(Integer data) {
+                super.onLoading(data);
+                IceUtil.showToast(requireContext(), R.string.loading_top_news);
+            }
+
+            @Override
+            protected boolean onSuccess(Integer data) {
+                if(data == null || data == 0) {
+                    IceUtil.showToast(requireContext(), R.string.already_up_to_date);
                 }
-                if(integer == 0) {
-                    Toast.makeText(requireContext(), R.string.already_up_to_date, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Toast.makeText(requireContext(),
-                        getString(R.string.update_news_count, integer), Toast.LENGTH_SHORT).show();
+                IceUtil.showToast(requireContext(), getString(R.string.update_news_count, data));
+                return true;
+            }
+
+            @Override
+            protected void onError(Integer data, String message) {
+                super.onError(data, message);
+                IceUtil.showToast(requireContext(), message);
             }
         });
         if(getViewModel().getTopNews().isEmpty()) {
-            getViewModel().onUpdateNewsList(20);
+            getViewModel().requestTopNewsList(20);
         }
     }
 
@@ -56,6 +66,11 @@ public class RecycleFragment extends DBFragment<RecycleViewModel> {
     @Override
     protected Class<RecycleViewModel> getVMClass() {
         return RecycleViewModel.class;
+    }
+
+    @Override
+    protected ViewModelProvider.Factory getVMFactory() {
+        return new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication());
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.icebuf.jetpackex;
 
 import androidx.annotation.LayoutRes;
-import androidx.lifecycle.ViewModel;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -29,7 +28,7 @@ public @interface RecyclerViewItem {
      *          &lt;variable
      *              name="student"
      *              type="com.xxx.Student" /&gt;
-     *      &lt;/data>
+     *      &lt;/data&gt;
      *      &lt;TextView
      *          android:text="@{student.name}"/&gt;
      *  &lt;/layout&gt;
@@ -61,6 +60,6 @@ public @interface RecyclerViewItem {
      * @return dataBinding生成的布局文件种variable对应的id
      * @see androidx.databinding.library.baseAdapters.BR
      */
-    int viewModelId() default 0;
+    int objectId() default 0;
 
 }

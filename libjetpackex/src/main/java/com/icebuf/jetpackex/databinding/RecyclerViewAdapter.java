@@ -202,13 +202,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
         if(item.layoutId() > 0 && item.variableId() > 0) {
             mItemAnnMap.put(object.getClass(), item);
-            return new ObjectItem(object, item.layoutId(), item.variableId(), item.viewModelId());
+            return new ObjectItem(object, item.layoutId(), item.variableId(), item.objectId());
         }
         if(item.layoutId() > 0 &&!TextUtils.isEmpty(item.variable())) {
             int variableId = getVariableId(item.variable());
             if(variableId > 0) {
                 mItemAnnMap.put(object.getClass(), item);
-                return new ObjectItem(object, item.layoutId(), variableId, item.viewModelId());
+                return new ObjectItem(object, item.layoutId(), variableId, item.objectId());
             }
         }
         throw new RuntimeException("Invalid params for annotation "

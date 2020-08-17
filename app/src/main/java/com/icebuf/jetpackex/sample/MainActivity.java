@@ -38,13 +38,10 @@ public class MainActivity extends DBActivity<MainViewModel> {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Navigation.findNavController(this, R.id.nav_host_fragment).popBackStack();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            return Navigation.findNavController(this, R.id.nav_host_fragment).popBackStack()
+                    || super.onOptionsItemSelected(item);
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 }

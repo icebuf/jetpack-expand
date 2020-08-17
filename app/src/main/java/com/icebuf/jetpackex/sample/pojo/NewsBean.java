@@ -1,10 +1,16 @@
 package com.icebuf.jetpackex.sample.pojo;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.icebuf.jetpackex.RecyclerViewItem;
 import com.icebuf.jetpackex.sample.R;
 
 import java.util.Objects;
 
+@Entity
 @RecyclerViewItem(layoutId = R.layout.item_news, variable = "news")
 public class NewsBean {
     /**
@@ -15,12 +21,19 @@ public class NewsBean {
      * url : http://toutiao.com/group/6861208325233574411/
      * source : 环球时报
      */
-
+    @ColumnInfo
     private String ctime;
+    @ColumnInfo
     private String title;
+    @ColumnInfo
     private String description;
+    @ColumnInfo
     private String picUrl;
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo
     private String url;
+    @ColumnInfo
     private String source;
 
     public String getCtime() {

@@ -1,4 +1,4 @@
-package com.icebuf.jetpackex.sample;
+package com.icebuf.jetpackex.sample.glide;
 
 import android.content.Context;
 
