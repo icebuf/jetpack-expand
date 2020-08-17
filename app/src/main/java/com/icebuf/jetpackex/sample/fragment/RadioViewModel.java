@@ -31,6 +31,7 @@ public class RadioViewModel extends ViewModel {
 
     public void onColorChanged(Object value) {
         backgroundColor.set((Integer) value);
+        Log.e("TAG", "onColorChanged():: " + value);
     }
 
     public ObservableField<String> getSex() {

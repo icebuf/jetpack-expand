@@ -101,7 +101,6 @@ public class NestRadioGroupBindingAdapter {
                 if(listener != null) {
                     listener.onValueChanged(group, valueArray.get(checkedId));
                 }
-                group.setTag(KEY_VALUE_CHECK, false);
             }
         });
         SparseArray<T> valueArray = getValueArray(view);

@@ -2,12 +2,16 @@ package com.icebuf.jetpackex.databinding.adapter;
 
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingListener;
+
+import com.icebuf.jetpackex.widget.NestedRadioGroup;
 
 import java.util.Objects;
 
@@ -35,16 +39,42 @@ public class RadioGroupBindingAdapter {
     @BindingAdapter(value = {"value"})
     public static <T> void setValue(RadioButton radioButton, T value) {
         ViewParent parent = radioButton.getParent();
-        if (parent instanceof RadioGroup) {
+        if(parent instanceof RadioGroup) {
             RadioGroup group = (RadioGroup) parent;
             SparseArray<T> valueArray = getValueArray(group);
             valueArray.append(radioButton.getId(), value);
-
             Boolean check = (Boolean) group.getTag(KEY_VALUE_CHECK);
             if(check != null && check) {
+                group.setTag(KEY_VALUE_CHECK, false);
                 group.check(radioButton.getId());
             }
+            return;
         }
+        parent = getParent(radioButton, NestedRadioGroup.class);
+        if(parent == null) {
+            Log.w(TAG, "The radio button is not wrapped in any supported RadioGroup");
+            return;
+        }
+        NestedRadioGroup group = (NestedRadioGroup) parent;
+        SparseArray<T> valueArray = getValueArray(group);
+        valueArray.append(radioButton.getId(), value);
+
+        Boolean check = (Boolean) group.getTag(KEY_VALUE_CHECK);
+        if(check != null && check) {
+            group.setTag(KEY_VALUE_CHECK, false);
+            group.check(radioButton.getId());
+        }
+    }
+
+    private static ViewParent getParent(View view, Class<?> clazz) {
+        ViewParent parent = view.getParent();
+        while (parent != view.getRootView()) {
+            if(clazz.isAssignableFrom(parent.getClass())) {
+                return parent;
+            }
+            parent = parent.getParent();
+        }
+        return null;
     }
 
 
@@ -79,7 +109,7 @@ public class RadioGroupBindingAdapter {
         Log.w(TAG, "value " + value + " for radioButton id not found!");
     }
 
-    private static <T> SparseArray<T>  getValueArray(RadioGroup group) {
+    private static <T> SparseArray<T>  getValueArray(ViewGroup group) {
         Object object = group.getTag(KEY_VALUE_MAP);
         if(object instanceof SparseArray) {
             return (SparseArray<T>) object;

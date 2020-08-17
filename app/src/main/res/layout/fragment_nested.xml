@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.icebuf.jetpackex.sample.fragment.RadioViewModel" />
+        <import type="com.icebuf.jetpackex.sample.pojo.Sex" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="15dp"
+            android:background="@{vm.backgroundColor}"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="使用支持RadioButton嵌套的NestRadioGroup"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@{vm.sex}"
+            app:textFormat="@{@string/xiaomin_sex}"/>
+
+        <com.icebuf.jetpackex.widget.NestedRadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:checkedValue="@{@color/red}"
+            app:onValueChanged="@{(view, value)->vm.onColorChanged(value)}" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:value="@{@color/red}"
+                    android:text="Color-Red" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:value="@{@color/blue}"
+                    android:text="Color-Blue" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:checkedValue="@{Sex.MAN}"
+                    app:onValueChanged="@{(view, value)->vm.onSexChanged(view, value)}">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:value="@{Sex.MAN}"
+                        android:text="Sex-Man" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:value="@{Sex.FEMALE}"
+                        android:text="Sex-Female" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:value="@{@color/black}"
+                android:text="Color-Black" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:value="@{@color/white}"
+                android:text="Color-White" />
+
+        </com.icebuf.jetpackex.widget.NestedRadioGroup>
+
+    </LinearLayout>
+
+</layout>

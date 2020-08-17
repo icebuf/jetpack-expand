@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_recycleFragment"
             app:destination="@id/recycleFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_nestedFragment"
+            app:destination="@id/nestedFragment" />
     </fragment>
 
     <fragment
@@ -39,5 +42,11 @@
         android:name="com.icebuf.jetpackex.sample.fragment.NewsFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_news"/>
+
+    <fragment
+        android:id="@+id/nestedFragment"
+        android:name="com.icebuf.jetpackex.sample.fragment.NestedFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_nested"/>
 
 </navigation>

@@ -22,8 +22,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp"
             android:text="@{item.description}"
             android:layout_marginTop="10dp"/>
 
