@@ -15,4 +15,20 @@
     <string name="loading_top_news">正在更新最新新闻</string>
     <string name="test_name_nested_radio_group">NestedRadioGroup</string>
     <string name="test_desc_nested_radio_group">支持RadioButton嵌套</string>
+
+    <string name="error_100">内部服务器错误</string>
+    <string name="error_110">接口暂时维护中</string>
+    <string name="error_120">IP请求来源受限</string>
+    <string name="error_130">API调用频率超限</string>
+    <string name="error_140">API没有调用权限</string>
+    <string name="error_150">接口可用次数不足</string>
+    <string name="error_160">账号未申请该接口</string>
+    <string name="error_170">Referer请求来源受限</string>
+    <string name="error_230">key错误或为空</string>
+    <string name="error_240">缺少key参数</string>
+    <string name="error_250">数据返回为空</string>
+    <string name="error_260">关键词不得为空</string>
+    <string name="error_270">缺少有效数据</string>
+    <string name="error_280">缺少必要的参数</string>
+    <string name="error_290">超过资源字节限制</string>
 </resources>

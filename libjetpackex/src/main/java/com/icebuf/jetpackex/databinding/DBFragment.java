@@ -24,7 +24,7 @@ public abstract class DBFragment<VM extends ViewModel> extends Fragment {
 
     private ViewDataBinding mBinding;
 
-    private VM mViewModel;
+    protected VM mViewModel;
 
     @Nullable
     @Override
@@ -36,7 +36,7 @@ public abstract class DBFragment<VM extends ViewModel> extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this, getVMFactory()).get(getVMClass());
+        mViewModel = new ViewModelProvider(this).get(getVMClass());
         mBinding.setVariable(getVariableId(), mViewModel);
     }
 
@@ -53,10 +53,6 @@ public abstract class DBFragment<VM extends ViewModel> extends Fragment {
 //    }
 
     protected abstract int getVariableId();
-
-    protected ViewModelProvider.Factory getVMFactory() {
-        return new ViewModelProvider.NewInstanceFactory();
-    }
 
     protected abstract Class<VM> getVMClass();
 

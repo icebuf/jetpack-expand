@@ -10,6 +10,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.icebuf.jetpackex.databinding.DBActivity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends DBActivity<MainViewModel> {
 
     @Override

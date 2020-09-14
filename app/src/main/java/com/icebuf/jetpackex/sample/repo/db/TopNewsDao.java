@@ -5,7 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.icebuf.jetpackex.sample.pojo.NewsBean;
+import com.icebuf.jetpackex.sample.pojo.TianNewsEntity;
 
 import java.util.List;
 
@@ -21,15 +21,15 @@ import io.reactivex.Observable;
 @Dao
 public interface TopNewsDao {
 
-    @Query("SELECT * FROM NewsBean LIMIT :num")
-    Observable<List<NewsBean>> getTopNews(int num);
+    @Query("SELECT * FROM TianNewsEntity LIMIT :num")
+    Observable<List<TianNewsEntity>> getTopNews(int num);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insertNews(NewsBean news);
+    Completable insertNews(TianNewsEntity news);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insertNews(List<NewsBean> newsList);
+    Completable insertNews(List<TianNewsEntity> newsList);
 
-    @Query("DELETE FROM NewsBean")
-    void deleteAllUsers();
+    @Query("DELETE FROM TianNewsEntity")
+    void deleteAllNews();
 }

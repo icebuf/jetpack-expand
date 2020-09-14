@@ -1,6 +1,6 @@
 package com.icebuf.jetpackex.sample.repo;
 
-import com.icebuf.jetpackex.sample.pojo.NewsBean;
+import com.icebuf.jetpackex.sample.pojo.TianNewsEntity;
 import com.icebuf.jetpackex.sample.repo.db.TopNewsDao;
 
 import java.util.List;
@@ -22,15 +22,15 @@ public class LocalDataSource {
         mTopNewsDao = dao;
     }
 
-    public Observable<List<NewsBean>> getTopNews(int num) {
+    public Observable<List<TianNewsEntity>> getTopNews(int num) {
         return mTopNewsDao.getTopNews(num);
     }
 
-    public Completable putNews(List<NewsBean> beans) {
+    public Completable putNews(List<TianNewsEntity> beans) {
         return mTopNewsDao.insertNews(beans);
     }
 
     public void deleteAll() {
-        mTopNewsDao.deleteAllUsers();
+        mTopNewsDao.deleteAllNews();
     }
 }

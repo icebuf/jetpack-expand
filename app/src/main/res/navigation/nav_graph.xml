@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_nestedFragment"
             app:destination="@id/nestedFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_videoFragment"
+            app:destination="@id/videoFragment" />
     </fragment>
 
     <fragment
@@ -48,5 +51,11 @@
         android:name="com.icebuf.jetpackex.sample.fragment.NestedFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_nested"/>
+
+    <fragment
+        android:id="@+id/videoFragment"
+        android:name="com.icebuf.jetpackex.sample.fragment.VideoFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/item_hot_video"/>
 
 </navigation>

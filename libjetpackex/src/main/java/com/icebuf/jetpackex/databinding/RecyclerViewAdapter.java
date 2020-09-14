@@ -57,7 +57,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private ItemClickHandler mItemClickHandler = new ItemClickHandler(this);
 
-    public RecyclerViewAdapter(List<?> items) {
+    public RecyclerViewAdapter(@NonNull List<?> items) {
         this.mItems = items;
     }
 
@@ -65,7 +65,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public BindingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ViewDataBinding binding = DataBindingUtil.inflate(inflater, viewType, parent, false);
+        ViewDataBinding binding = DataBindingUtil.inflate(inflater,
+                viewType, parent, false);
         return new BindingHolder(binding);
     }
 

@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @RecyclerViewItem(layoutId = R.layout.item_news, variable = "news")
-public class NewsBean {
+public class TianNewsEntity {
     /**
      * ctime : 2020-08-15 21:45:06
      * title : 港媒：林郑月娥删除剑桥名誉院士身份
@@ -88,13 +88,13 @@ public class NewsBean {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NewsBean newsBean = (NewsBean) o;
-        return ctime.equals(newsBean.ctime) &&
-                title.equals(newsBean.title) &&
-                Objects.equals(description, newsBean.description) &&
-                Objects.equals(picUrl, newsBean.picUrl) &&
-                Objects.equals(url, newsBean.url) &&
-                source.equals(newsBean.source);
+        TianNewsEntity newsEntity = (TianNewsEntity) o;
+        return ctime.equals(newsEntity.ctime) &&
+                title.equals(newsEntity.title) &&
+                Objects.equals(description, newsEntity.description) &&
+                Objects.equals(picUrl, newsEntity.picUrl) &&
+                Objects.equals(url, newsEntity.url) &&
+                source.equals(newsEntity.source);
     }
 
     @Override

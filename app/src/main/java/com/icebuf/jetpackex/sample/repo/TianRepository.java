@@ -7,7 +7,7 @@ import androidx.databinding.ObservableList;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.icebuf.jetpackex.sample.pojo.NewsBean;
+import com.icebuf.jetpackex.sample.pojo.TianNewsEntity;
 import com.icebuf.jetpackex.sample.util.ConvertUtil;
 import com.icebuf.jetpackex.viewmodel.Result;
 
@@ -25,35 +25,35 @@ import io.reactivex.schedulers.Schedulers;
  *
  * Repository 存储全局数据，生命周期大于Activity
  */
-public class ToutiaoRepository {
+public class TianRepository {
 
-    private static final String TAG = ToutiaoRepository.class.getSimpleName();
+    private static final String TAG = TianRepository.class.getSimpleName();
 
-    private ToutiaoDataSource mToutiaoDataSource;
+    private TianDataSource mTianDataSource;
 
     private LocalDataSource mLocalDataSource;
 
     private MutableLiveData<Result<Integer>> mTopNewsCount = new MutableLiveData<>();
 
-    private ObservableList<NewsBean> mNewsList = new ObservableArrayList<>();
+    private ObservableList<TianNewsEntity> mNewsList = new ObservableArrayList<>();
 
     private CompositeDisposable mDisposable = new CompositeDisposable();
 
-    private static volatile ToutiaoRepository sInstance;
+    private static volatile TianRepository sInstance;
 
-    private ToutiaoRepository(ToutiaoDataSource dataSource, LocalDataSource localDataSource) {
-        mToutiaoDataSource = dataSource;
+    private TianRepository(TianDataSource dataSource, LocalDataSource localDataSource) {
+        mTianDataSource = dataSource;
         mLocalDataSource = localDataSource;
     }
 
-    public static ToutiaoRepository getInstance(ToutiaoDataSource dataSource, LocalDataSource localDataSource) {
+    public static TianRepository getInstance(TianDataSource dataSource, LocalDataSource localDataSource) {
         if(sInstance == null) {
-            sInstance = new ToutiaoRepository(dataSource, localDataSource);
+            sInstance = new TianRepository(dataSource, localDataSource);
         }
         return sInstance;
     }
 
-    public ObservableList<NewsBean> getTopNews() {
+    public ObservableList<TianNewsEntity> getTopNews() {
         return mNewsList;
     }
 
@@ -73,7 +73,7 @@ public class ToutiaoRepository {
 
     private void loadRemoteNews(int num) {
         Log.w(TAG, "load form remote: " + num);
-        mDisposable.add(mToutiaoDataSource.updateTopNews(num)
+        mDisposable.add(mTianDataSource.getTopNews(num)
                 .subscribe(toutiaoResponse -> {
                     if (toutiaoResponse.getCode() == 200) {
                         updateTopNews(toutiaoResponse.getNewslist());
@@ -88,24 +88,24 @@ public class ToutiaoRepository {
         mDisposable.add(mLocalDataSource.getTopNews(num)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<NewsBean>>() {
+                .subscribe(new Consumer<List<TianNewsEntity>>() {
                     @Override
-                    public void accept(List<NewsBean> beans) throws Exception {
+                    public void accept(List<TianNewsEntity> beans) throws Exception {
                         if(beans == null || beans.isEmpty()) {
                             //本地没有数据
                             loadRemoteNews(num);
                             return;
                         }
                         //按发布时间排序
-                        Collections.sort(beans, new Comparator<NewsBean>() {
+                        Collections.sort(beans, new Comparator<TianNewsEntity>() {
                             @Override
-                            public int compare(NewsBean o1, NewsBean o2) {
+                            public int compare(TianNewsEntity o1, TianNewsEntity o2) {
                                 return o1.getCtime().compareTo(o2.getCtime());
                             }
                         });
                         mNewsList.addAll(beans);
                         Log.w(TAG, "loaded local news: " + beans.size());
-                        NewsBean topNews = beans.get(0);
+                        TianNewsEntity topNews = beans.get(0);
                         long date = ConvertUtil.date2Long("yyyy-MM-dd H:m:s", topNews.getCtime());
                         if(System.currentTimeMillis() / 1000 - date > TimeUnit.MINUTES.toSeconds(30)) {
                             //有足够的数据但是过期了
@@ -118,7 +118,7 @@ public class ToutiaoRepository {
                 }));
     }
 
-    private void updateTopNews(List<NewsBean> newslist) {
+    private void updateTopNews(List<TianNewsEntity> newslist) {
         if(mNewsList.isEmpty()) {
             Log.w(TAG, "loaded remote news: " + newslist.size());
             mNewsList.addAll(newslist);
@@ -127,16 +127,16 @@ public class ToutiaoRepository {
                     .subscribe());
             mTopNewsCount.setValue(Result.success(newslist.size()));
         } else {
-            NewsBean firstNews = mNewsList.get(0);
+            TianNewsEntity firstNews = mNewsList.get(0);
             int index = 0;
-            for (NewsBean bean : newslist) {
+            for (TianNewsEntity bean : newslist) {
                 if(bean.equals(firstNews)) {
                     index = newslist.indexOf(bean);
                     break;
                 }
             }
             if(index > 0) {
-                List<NewsBean> sub = newslist.subList(0, index);
+                List<TianNewsEntity> sub = newslist.subList(0, index);
                 mNewsList.addAll(0, sub);
                 mDisposable.add(mLocalDataSource.putNews(newslist)
                         .subscribeOn(Schedulers.io())

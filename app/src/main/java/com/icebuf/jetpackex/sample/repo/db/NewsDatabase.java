@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.icebuf.jetpackex.sample.pojo.NewsBean;
+import com.icebuf.jetpackex.sample.pojo.TianNewsEntity;
 
 /**
  * @author IceTang
@@ -14,7 +14,7 @@ import com.icebuf.jetpackex.sample.pojo.NewsBean;
  * Data: 2020/8/17
  * E-mail：bflyff@hotmail.com
  */
-@Database(entities = {NewsBean.class}, version = 1, exportSchema = false)
+@Database(entities = {TianNewsEntity.class}, version = 1, exportSchema = false)
 public abstract class NewsDatabase  extends RoomDatabase {
 
     private static NewsDatabase INSTANCE;

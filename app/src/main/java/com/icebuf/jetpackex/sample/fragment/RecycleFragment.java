@@ -6,7 +6,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.library.baseAdapters.BR;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.icebuf.jetpackex.databinding.DBFragment;
 import com.icebuf.jetpackex.sample.R;
@@ -15,10 +14,13 @@ import com.icebuf.jetpackex.viewmodel.ResultObserver;
 import com.icebuf.testcase.ItemGroup;
 import com.icebuf.testcase.ResItem;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 @ItemGroup("testcase")
 @ResItem(name = R.string.test_name_recycle_view,
         description = R.string.test_desc_recycle_view,
         destination = R.id.action_homeFragment_to_recycleFragment)
+@AndroidEntryPoint
 public class RecycleFragment extends DBFragment<RecycleViewModel> {
 
 
@@ -29,7 +31,6 @@ public class RecycleFragment extends DBFragment<RecycleViewModel> {
 //        RecyclerView recyclerView = view.findViewById(R.id.rv_news);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 //        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-
         getViewModel().getTopNewsCount().observe(getViewLifecycleOwner(), new ResultObserver<Integer>() {
 
             @Override
@@ -66,11 +67,6 @@ public class RecycleFragment extends DBFragment<RecycleViewModel> {
     @Override
     protected Class<RecycleViewModel> getVMClass() {
         return RecycleViewModel.class;
-    }
-
-    @Override
-    protected ViewModelProvider.Factory getVMFactory() {
-        return new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication());
     }
 
     @Override

@@ -28,7 +28,7 @@ public abstract class DBActivity<VM extends ViewModel> extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
-        mViewModel = new ViewModelProvider(this, getVMFactory()).get(getVMClass());
+        mViewModel = new ViewModelProvider(this).get(getVMClass());
         mBinding.setVariable(getVariableId(), mViewModel);
         mBinding.setLifecycleOwner(this);
     }
@@ -43,11 +43,6 @@ public abstract class DBActivity<VM extends ViewModel> extends AppCompatActivity
 
     @NonNull
     protected abstract Class<VM> getVMClass();
-
-    @NonNull
-    protected ViewModelProvider.Factory getVMFactory() {
-        return new ViewModelProvider.NewInstanceFactory();
-    }
 
     @LayoutRes
     protected abstract int getLayoutId();
