@@ -2,7 +2,7 @@ package com.icebuf.testcase;
 
 public @interface Item {
 
-    int index();
+    int index() default 0;
 
     String name();
 

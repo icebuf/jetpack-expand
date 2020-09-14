@@ -63,9 +63,13 @@ public class TestCaseProcessor extends AbstractProcessor {
     }
 
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(ResItem.class);
         Map<String, List<ItemEntity>> listMap = new HashMap<>();
+        Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(Item.class);
         for (Element element : elements) {
+            handleElement(element, listMap);
+        }
+        Set<? extends Element> resElements = roundEnvironment.getElementsAnnotatedWith(ResItem.class);
+        for (Element element : resElements) {
             handleElement(element, listMap);
         }
         for (Map.Entry<String, List<ItemEntity>> entry : listMap.entrySet()) {
@@ -111,7 +115,7 @@ public class TestCaseProcessor extends AbstractProcessor {
         }
     }
 
-    private void handleElement(Element element, Map<String, List<ItemEntity>> testItemsMap) {
+    private void handleElement(Element element, Map<String, List<ItemEntity>> itemsMap) {
         if(element instanceof TypeElement) {
             TypeElement typeElement = (TypeElement) element;
             String group = getTestGroup(typeElement);
@@ -119,14 +123,8 @@ public class TestCaseProcessor extends AbstractProcessor {
             if(entity == null) {
                 return;
             }
-            List<ItemEntity> entities = testItemsMap.get(group);
-            if(entities == null) {
-                entities = new ArrayList<>();
-                testItemsMap.put(group, entities);
-            }
+            List<ItemEntity> entities = itemsMap.computeIfAbsent(group, (k)-> new ArrayList<>());
             entities.add(entity);
-            messager.printMessage(Diagnostic.Kind.NOTE,
-                    "find group: " + group + " test: " + entities.toString());
         }
     }
 

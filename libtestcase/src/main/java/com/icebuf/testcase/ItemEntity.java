@@ -72,4 +72,17 @@ public class ItemEntity {
     public void setIndex(int index) {
         this.index = index;
     }
+
+    @Override
+    public String toString() {
+        return "ItemEntity{" +
+                "index=" + index +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", destination=" + destination +
+                ", nameId=" + nameId +
+                ", descriptionId=" + descriptionId +
+                '}';
+    }
 }
