@@ -39,12 +39,15 @@
             android:orientation="vertical"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
+            android:background="@android:color/darker_gray"
+            android:padding="20dp"
             app:checkedValue="@{@color/red}"
             app:onValueChanged="@{(view, value)->vm.onColorChanged(value)}" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@android:color/holo_blue_light"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -64,6 +67,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@android:color/holo_green_light"
                 android:orientation="horizontal">
 
                 <RadioGroup
@@ -98,8 +102,8 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:value="@{@color/white}"
-                android:text="Color-White" />
+                app:value="@{@color/gray}"
+                android:text="Color-Gray" />
 
         </com.icebuf.jetpackex.widget.NestedRadioGroup>
 

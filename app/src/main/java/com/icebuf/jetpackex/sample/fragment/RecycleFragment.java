@@ -43,8 +43,9 @@ public class RecycleFragment extends DBFragment<RecycleViewModel> {
             protected boolean onSuccess(Integer data) {
                 if(data == null || data == 0) {
                     IceUtil.showToast(requireContext(), R.string.already_up_to_date);
+                } else {
+                    IceUtil.showToast(requireContext(), getString(R.string.update_news_count, data));
                 }
-                IceUtil.showToast(requireContext(), getString(R.string.update_news_count, data));
                 return true;
             }
 
