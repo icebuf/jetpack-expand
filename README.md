@@ -1,10 +1,13 @@
+![Maven Central](https://img.shields.io/maven-central/v/com.github.icebuf/jetpack-ex)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/icebuf/jetpack-expand)
+![GitHub](https://img.shields.io/github/license/icebuf/jetpack-expand)
 # jetpack-expand
 基于安卓Jetpack框架组件，在安卓应用开发上的一些辅助类和工具
 
 ## 导入依赖
 
 ```gradle
-    com.github.icebuf:jetpack-ex:0.0.2
+    implementation 'com.github.icebuf:jetpack-ex:0.0.2'
 ```
 
 ## 万能RecyclerView适配器
