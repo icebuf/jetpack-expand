@@ -1,0 +1,92 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+// 源代码一起打包
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.sourceFiles
+}
+
+artifacts {
+    archives androidSourcesJar //, androidJavadocsJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    loadProperties('../local.properties')
+    def username = getProperty('nexus.username')
+    def password = getProperty('nexus.password')
+    repositories {
+        mavenDeployer {
+            beforeDeployment {
+                MavenDeployment deployment -> signing.signPom(deployment)
+            }
+            repository(url: getProperty('maven.repo')) {
+                authentication(userName: username, password: password)
+            }
+            snapshotRepository(url: getProperty('maven.snapshot.repo')) {
+                authentication(userName: username, password: password)
+            }
+            pom.project {
+                name "${project.name}"
+                groupId getProperty('maven.groupId')
+                artifactId  getProperty('maven.artifactId')
+                version getProperty('maven.version')
+//                packaging 'aar'
+                description 'jetpack expand'
+                url getProperty('project.url')
+                scm {
+                    connection "scm:git:${getProperty('project.repo')}"
+                    developerConnection "scm:git:${getProperty('project.repo')}"
+                    url getProperty('project.repo')
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'icebuf'
+                        name 'IceTang'
+                        email '1004859421@qq.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+def loadProperties(def path){
+    File file = project.file(path)
+    if(file.exists()){
+        InputStream inputStream = file.newDataInputStream();
+        Properties properties = new Properties()
+        properties.load(inputStream)
+        for (def entry : properties.entrySet()) {
+            try {
+                setProperty(entry.key, entry.value)
+//                println(entry.key + ": " + entry.value)
+            } catch (MissingPropertyException ignore) {
+            }
+        }
+    }
+}

@@ -1,6 +1,12 @@
 # jetpack-expand
 基于安卓Jetpack框架组件，在安卓应用开发上的一些辅助类和工具
 
+## 导入依赖
+
+```gradle
+    com.github.icebuf:jetpack-ex:0.0.2
+```
+
 ## 万能RecyclerView适配器
 
 这次真的不用再写adapter了
