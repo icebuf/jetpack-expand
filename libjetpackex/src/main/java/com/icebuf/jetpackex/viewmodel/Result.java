@@ -70,7 +70,7 @@ public class Result<T> {
         return new Result<>(Status.ERROR, data, message);
     }
 
-    public static <T> boolean isLoadingResult(LiveData<Result<T>> liveData) {
+    public static <T> boolean isLoading(LiveData<Result<T>> liveData) {
         Result<T> result = liveData.getValue();
         return result != null && result.status() == Result.Status.LOADING;
     }

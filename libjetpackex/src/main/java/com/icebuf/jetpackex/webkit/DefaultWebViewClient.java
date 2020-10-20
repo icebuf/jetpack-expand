@@ -1,4 +1,4 @@
-package com.icebuf.jetpackex;
+package com.icebuf.jetpackex.webkit;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +9,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class DefaultWebViewClient extends WebViewClient {
+
+    public static final Class<? extends WebViewClient> CLAZZ = DefaultWebViewClient.class;
+
+    public static final String JS_RESIZE_IMAGE = "javascript:function ResizeImages() {" +
+            "   for (i = 0; i < document.images.length; i++) {" +
+            "       var img = document.images[i];" +
+            "       img.style.maxWidth = '100%'; " +
+            "       img.style.height = 'auto';" +
+            "   }" +
+            "}";
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -35,7 +45,14 @@ public class DefaultWebViewClient extends WebViewClient {
         }
     }
 
-    public void onSetting(WebSettings settings) {
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+        view.loadUrl(JS_RESIZE_IMAGE);
+        view.loadUrl("javascript:ResizeImages();");
+    }
+
+    public static void setting(WebSettings settings) {
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);//设置js可以直接打开窗口，如window.open()，默认为false
         settings.setJavaScriptEnabled(true);//是否允许执行js，默认为false。设置true时，会提醒可能造成XSS漏洞

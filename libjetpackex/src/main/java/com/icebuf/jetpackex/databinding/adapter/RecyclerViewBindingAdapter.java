@@ -142,13 +142,13 @@ public class RecyclerViewBindingAdapter {
     }
 
     @BindingAdapter(value = "dropUpScrollListener")
-    public static <T> void setDropUpScrollListener(RecyclerView view, String clazzName) {
+    public static void setDropUpScrollListener(RecyclerView view, String clazzName) {
         RecyclerView.OnScrollListener listener = ReflectUtil.newInstance(clazzName);
         view.addOnScrollListener(listener);
     }
 
     @BindingAdapter(value = {"dropDownScrollListener", "dropDownAttrScrollListener"}, requireAll = false)
-    public static <T> void setDropDownScrollListener(RecyclerView view,
+    public static void setDropDownScrollListener(RecyclerView view,
                                                      RecyclerView.OnScrollListener listener,
                                                      InverseBindingListener attrChange) {
 
@@ -185,7 +185,7 @@ public class RecyclerViewBindingAdapter {
     }
 
     @BindingAdapter(value = "itemAnimator", requireAll = false)
-    public static <T> void setItemAnimator(RecyclerView view, String className) {
+    public static void setItemAnimator(RecyclerView view, String className) {
         try {
             Class<?> clazz = Class.forName(className);
             if(clazz.isAssignableFrom(RecyclerView.ItemAnimator.class)) {
@@ -198,7 +198,7 @@ public class RecyclerViewBindingAdapter {
     }
 
     @BindingAdapter(value = "onItemClick", requireAll = false)
-    public static <T> void setOnItemClick(RecyclerView view, OnItemClickListener listener) {
+    public static void setOnItemClick(RecyclerView view, OnItemClickListener listener) {
         RecyclerView.Adapter<?> adapter = view.getAdapter();
         if(adapter == null) {
             view.setTag(KEY_ITEM_CLICK, listener);
@@ -209,7 +209,7 @@ public class RecyclerViewBindingAdapter {
     }
 
     @BindingAdapter(value = "onItemLongClick", requireAll = false)
-    public static <T> void setOnItemLongClick(RecyclerView view, OnItemLongClickListener listener) {
+    public static void setOnItemLongClick(RecyclerView view, OnItemLongClickListener listener) {
         RecyclerView.Adapter<?> adapter = view.getAdapter();
         if(adapter == null) {
             view.setTag(KEY_ITEM_LONG_CLICK, listener);

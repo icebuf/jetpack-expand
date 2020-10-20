@@ -7,9 +7,10 @@
             type="com.icebuf.jetpackex.sample.fragment.RecycleViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swl_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_news"
@@ -19,16 +20,6 @@
             app:onItemClick="@{(view, item, pos)->vm.onNewsItemClick(item, pos)}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="80dp"
-            android:onClick="@{()->vm.requestTopNewsList(20)}"
-            android:src="@drawable/ic_baseline_add_24"
-            app:rippleColor="@android:color/darker_gray"/>
-
-    </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

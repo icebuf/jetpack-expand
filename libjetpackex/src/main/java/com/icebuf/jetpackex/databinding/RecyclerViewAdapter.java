@@ -258,7 +258,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mTag = object;
     }
 
-    static class BindingHolder extends RecyclerView.ViewHolder {
+    public static class BindingHolder extends RecyclerView.ViewHolder {
 
         ViewDataBinding binding;
 
@@ -330,40 +330,40 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     static class ObservableListCallback<T> extends
             ObservableList.OnListChangedCallback<ObservableList<T>> {
 
-        private RecyclerViewAdapter mAdapter;
+        private WeakReference<RecyclerViewAdapter> mAdapter;
 
         public ObservableListCallback(RecyclerViewAdapter adapter) {
-            this.mAdapter = adapter;
+            mAdapter = new WeakReference<>(adapter);
         }
 
         @Override
         public void onChanged(ObservableList<T> sender) {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.get().notifyDataSetChanged();
         }
 
         @Override
         public void onItemRangeChanged(ObservableList<T> sender,
                                        int positionStart, int itemCount) {
-            mAdapter.notifyItemRangeChanged(positionStart, itemCount);
+            mAdapter.get().notifyItemRangeChanged(positionStart, itemCount);
         }
 
         @Override
         public void onItemRangeInserted(ObservableList<T> sender,
                                         int positionStart, int itemCount) {
-            mAdapter.notifyItemRangeInserted(positionStart, itemCount);
+            mAdapter.get().notifyItemRangeInserted(positionStart, itemCount);
         }
 
         @Override
         public void onItemRangeMoved(ObservableList<T> sender,
                                      int fromPosition, int toPosition, int itemCount) {
-            mAdapter.notifyItemRangeChanged(fromPosition, itemCount);
-            mAdapter.notifyItemRangeChanged(toPosition, itemCount);
+            mAdapter.get().notifyItemRangeChanged(fromPosition, itemCount);
+            mAdapter.get().notifyItemRangeChanged(toPosition, itemCount);
         }
 
         @Override
         public void onItemRangeRemoved(ObservableList<T> sender,
                                        int positionStart, int itemCount) {
-            mAdapter.notifyItemRangeRemoved(positionStart, itemCount);
+            mAdapter.get().notifyItemRangeRemoved(positionStart, itemCount);
         }
     }
 }

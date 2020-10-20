@@ -20,14 +20,14 @@
             android:id="@+id/action_homeFragment_to_nestedFragment"
             app:destination="@id/nestedFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_videoFragment"
-            app:destination="@id/videoFragment" />
+            android:id="@+id/action_homeFragment_to_gankFragment"
+            app:destination="@id/gankFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/radioFragment"
         android:name="com.icebuf.jetpackex.sample.fragment.RadioFragment"
-        android:label="@string/app_name"
+        android:label="Title"
         tools:layout="@layout/fragment_radio"/>
 
     <fragment
@@ -37,14 +37,14 @@
         tools:layout="@layout/fragment_recycle">
         <action
             android:id="@+id/action_recycleFragment_to_newsFragment"
-            app:destination="@id/newsFragment" />
+            app:destination="@id/webFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/newsFragment"
-        android:name="com.icebuf.jetpackex.sample.fragment.NewsFragment"
+        android:id="@+id/webFragment"
+        android:name="com.icebuf.jetpackex.sample.fragment.WebFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_news"/>
+        tools:layout="@layout/fragment_web"/>
 
     <fragment
         android:id="@+id/nestedFragment"
@@ -53,9 +53,21 @@
         tools:layout="@layout/fragment_nested"/>
 
     <fragment
-        android:id="@+id/videoFragment"
-        android:name="com.icebuf.jetpackex.sample.fragment.VideoFragment"
+        android:id="@+id/gankFragment"
+        android:name="com.icebuf.jetpackex.sample.fragment.GankFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/item_hot_video"/>
+        tools:layout="@layout/fragment_gank"/>
+
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.icebuf.jetpackex.sample.fragment.ArticleFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_article"/>
+
+    <action android:id="@+id/action_global_webFragment"
+        app:destination="@id/webFragment" />
+
+    <action android:id="@+id/action_global_articleFragment"
+        app:destination="@id/articleFragment" />
 
 </navigation>

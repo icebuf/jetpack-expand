@@ -1,9 +1,15 @@
 package com.icebuf.jetpackex.sample.repo;
 
+import com.icebuf.jetpackex.sample.pojo.GankArticleEntity;
 import com.icebuf.jetpackex.sample.pojo.TianNewsEntity;
+import com.icebuf.jetpackex.sample.repo.db.GankArticleDao;
+import com.icebuf.jetpackex.sample.repo.db.GankDatabase;
+import com.icebuf.jetpackex.sample.repo.db.NewsDatabase;
 import com.icebuf.jetpackex.sample.repo.db.TopNewsDao;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -14,12 +20,16 @@ import io.reactivex.Observable;
  * Data: 2020/8/17
  * E-mail：bflyff@hotmail.com
  */
-public class LocalDataSource {
+public class LocalDataSource extends DataSource{
 
-    private TopNewsDao mTopNewsDao;
+    TopNewsDao mTopNewsDao;
 
-    public LocalDataSource(TopNewsDao dao) {
-        mTopNewsDao = dao;
+    GankArticleDao mArticleDao;
+
+    @Inject
+    public LocalDataSource(NewsDatabase database, GankDatabase gankDatabase) {
+        mTopNewsDao = database.topNewsDao();
+        mArticleDao = gankDatabase.articleDao();
     }
 
     public Observable<List<TianNewsEntity>> getTopNews(int num) {
@@ -32,5 +42,17 @@ public class LocalDataSource {
 
     public void deleteAll() {
         mTopNewsDao.deleteAllNews();
+    }
+
+    public Observable<GankArticleEntity> getArticleDetails(String id) {
+        return mArticleDao.findById(id);
+    }
+
+    public Observable<List<GankArticleEntity>> getArticleDetails2(String id) {
+        return mArticleDao.findById2(id);
+    }
+
+    public Completable putArticle(GankArticleEntity article) {
+        return subAndObs(mArticleDao.insert(article));
     }
 }

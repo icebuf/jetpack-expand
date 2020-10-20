@@ -9,11 +9,12 @@ import androidx.annotation.Nullable;
 import androidx.databinding.library.baseAdapters.BR;
 import androidx.navigation.Navigation;
 
-import com.icebuf.jetpackex.DefaultWebViewClient;
 import com.icebuf.jetpackex.databinding.DBFragment;
 import com.icebuf.jetpackex.sample.R;
+import com.icebuf.jetpackex.sample.constants.ViewModelConstants;
+import com.icebuf.jetpackex.webkit.ProgressWebChromeClient;
 
-public class NewsFragment extends DBFragment<NewsViewModel> {
+public class WebFragment extends DBFragment<NewsViewModel> {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -24,13 +25,14 @@ public class NewsFragment extends DBFragment<NewsViewModel> {
             Navigation.findNavController(view).popBackStack();
             return;
         }
-        String url = bundle.getString("url", "");
+        String url = bundle.getString(ViewModelConstants.KEY_URL, "");
         if(TextUtils.isEmpty(url)) {
             Navigation.findNavController(view).popBackStack();
             return;
         }
-        getBinding().setVariable(BR.client, new DefaultWebViewClient());
-        getViewModel().setNewsUrl(url);
+//        getBinding().setVariable(BR.client, new DefaultWebViewClient());
+        getBinding().setVariable(BR.chromeClient, new ProgressWebChromeClient());
+        getViewModel().setUrl(url);
     }
 
     @Override
@@ -45,6 +47,6 @@ public class NewsFragment extends DBFragment<NewsViewModel> {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_news;
+        return R.layout.fragment_web;
     }
 }

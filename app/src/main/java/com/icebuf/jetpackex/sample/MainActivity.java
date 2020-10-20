@@ -9,6 +9,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.icebuf.jetpackex.databinding.DBActivity;
+import com.icebuf.jetpackex.sample.util.ActionBarUtil;
+import com.icebuf.jetpackex.sample.util.StatusBarUtil;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -19,6 +21,10 @@ public class MainActivity extends DBActivity<MainViewModel> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        StatusBarUtil.setTranslucentStatus(this);
+        StatusBarUtil.setRootViewFitsSystemWindows(this, true);
+        ActionBarUtil.setTitleInCenter(MainActivity.this, true);
+//        ActionBarUtil.with(this).setBackgroundDrawable(getDrawable(R.drawable.bg_actionbar));
         NavController controller = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, controller);
     }

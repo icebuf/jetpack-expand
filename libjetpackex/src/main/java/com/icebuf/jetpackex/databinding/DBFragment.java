@@ -22,6 +22,8 @@ import androidx.lifecycle.ViewModelProvider;
  */
 public abstract class DBFragment<VM extends ViewModel> extends Fragment {
 
+    protected final String TAG = getClass().getSimpleName();
+
     private ViewDataBinding mBinding;
 
     protected VM mViewModel;
@@ -40,8 +42,8 @@ public abstract class DBFragment<VM extends ViewModel> extends Fragment {
         mBinding.setVariable(getVariableId(), mViewModel);
     }
 
-    public ViewDataBinding getBinding() {
-        return mBinding;
+    public <T extends ViewDataBinding> T getBinding() {
+        return (T) mBinding;
     }
 
     public VM getViewModel() {

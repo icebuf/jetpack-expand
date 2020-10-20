@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.icebuf.jetpackex.sample.fragment.GankViewModel" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/rg_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:checkedValue="@{@string/gank_category_article_code}"
+            app:onValueChanged="@{(view, val)->vm.onCategoryChanged(view, val)}"
+            >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gank_category_all"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:value="@{@string/gank_category_all_code}"
+                android:background="@drawable/bg_rb_round_stroke_blue"
+                android:padding="6dp"
+                android:button="@null"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_rb_round_stroke_blue"
+                android:button="@null"
+                android:checked="true"
+                android:fontFamily="sans-serif"
+                android:padding="6dp"
+                android:text="@string/gank_category_article"
+                app:value="@{@string/gank_category_article_code}" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gank_category_ganhuo"
+                app:value="@{@string/gank_category_ganhuo_code}"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_rb_round_stroke_blue"
+                android:button="@null"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gank_category_girl"
+                app:value="@{@string/gank_category_girl_code}"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_rb_round_stroke_blue"
+                android:button="@null"/>
+
+        </RadioGroup>
+
+        <com.zhpan.bannerview.BannerViewPager
+            android:id="@+id/view_banner"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            app:bvp_auto_play="true"
+            app:bvp_can_loop="true"
+            app:bvp_round_corner="8dp"
+            app:adapterDataSet="@{vm.bannerList}"
+            app:onPageClick="@{(view, pos)->vm.onPageClick(view, pos)}"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:adapterDataSet="@{vm.dataList}"
+            app:onItemClick="@{(view, item, pos)->vm.onItemClick(item, pos)}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </LinearLayout>
+</layout>

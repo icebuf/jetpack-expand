@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <import type="android.text.TextUtils" />
+        <import type="com.icebuf.jetpackex.webkit.DefaultWebViewClient" />
+        <variable
+            name="vm"
+            type="com.icebuf.jetpackex.sample.fragment.ArticleViewModel" />
+    </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+<!--            <WebView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                app:webViewClient="@{DefaultWebViewClient.CLAZZ}"-->
+<!--                app:loadData="@{vm.contentText}"-->
+<!--                app:settings="@{(view, settings)->DefaultWebViewClient.setting(settings)}"-->
+<!--                android:visibility="@{TextUtils.isEmpty(vm.contentText) ? View.GONE : View.VISIBLE}"/>-->
+
+            <TextView
+                android:id="@+id/tv_describe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:text="@{vm.contentText}"
+                app:useMarkdown="@{vm.markwon}"
+                android:scrollbars="vertical"
+                android:textIsSelectable="true"
+                android:lineSpacingMultiplier="1.5"
+                android:padding="15dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</layout>

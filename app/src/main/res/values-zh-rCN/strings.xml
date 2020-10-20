@@ -31,4 +31,15 @@
     <string name="error_270">缺少有效数据</string>
     <string name="error_280">缺少必要的参数</string>
     <string name="error_290">超过资源字节限制</string>
+    <string name="test_name_gank_api">GankApi测试</string>
+    <string name="test_desc_gank_api">GankApi测试</string>
+    <string name="gank_category_all">All</string>
+    <string name="gank_category_all_code">All</string>
+    <string name="gank_category_article">Article</string>
+    <string name="gank_category_article_code">Article</string>
+    <string name="gank_category_ganhuo">GanHuo</string>
+    <string name="gank_category_ganhuo_code">GanHuo</string>
+    <string name="gank_category_girl">Girl</string>
+    <string name="gank_category_girl_code">Girl</string>
+
 </resources>

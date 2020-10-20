@@ -2,6 +2,8 @@ package com.icebuf.jetpackex.sample.hilt;
 
 import androidx.lifecycle.ViewModel;
 
+import com.icebuf.jetpackex.sample.fragment.ArticleViewModel;
+import com.icebuf.jetpackex.sample.fragment.GankViewModel;
 import com.icebuf.jetpackex.sample.fragment.RecycleViewModel;
 
 import dagger.Binds;
@@ -25,11 +27,30 @@ public abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ClassKey(RecycleViewModel.class)
-    public abstract ViewModel bindActivityViewModel(RecycleViewModel viewModel);
+    public abstract ViewModel bindActivityRecycleViewModel(RecycleViewModel viewModel);
 
     @Binds
     @IntoMap
     @ClassKey(RecycleViewModel.class)
-    public abstract ViewModel bindFragmentViewModel(RecycleViewModel viewModel);
+    public abstract ViewModel bindFragmentRecycleViewModel(RecycleViewModel viewModel);
 
+    @Binds
+    @IntoMap
+    @ClassKey(GankViewModel.class)
+    public abstract ViewModel bindActivityGankViewModel(GankViewModel viewModel);
+
+    @Binds
+    @IntoMap
+    @ClassKey(GankViewModel.class)
+    public abstract ViewModel bindFragmentGankViewModel(GankViewModel viewModel);
+
+    @Binds
+    @IntoMap
+    @ClassKey(ArticleViewModel.class)
+    public abstract ViewModel bindActivityArticleViewModel(ArticleViewModel viewModel);
+
+    @Binds
+    @IntoMap
+    @ClassKey(ArticleViewModel.class)
+    public abstract ViewModel bindFragmentArticleViewModel(ArticleViewModel viewModel);
 }

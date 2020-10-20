@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="com.icebuf.jetpackex.webkit.ProgressWebChromeClient" />
+        <import type="com.icebuf.jetpackex.webkit.DefaultWebViewClient" />
+        <variable
+            name="vm"
+            type="com.icebuf.jetpackex.sample.fragment.NewsViewModel" />
+        <variable
+            name="chromeClient"
+            type="ProgressWebChromeClient" />
+    </data>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <WebView
+            android:id="@+id/wv_news"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:webProgress="@{@id/pb_web}"
+            app:webViewClient="@{DefaultWebViewClient.CLAZZ}"
+            app:settings="@{(view, settings)->DefaultWebViewClient.setting(settings)}"
+            app:loadUrl="@{vm.url}"/>
+
+        <ProgressBar
+            android:id="@+id/pb_web"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="top"
+            android:progressDrawable="@drawable/progress_web"
+            android:progress="0"
+            android:max="100"
+            android:visibility="visible" />
+
+    </FrameLayout>
+
+</layout>

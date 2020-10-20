@@ -6,16 +6,16 @@ import androidx.lifecycle.ViewModel;
 
 public class NewsViewModel extends ViewModel {
 
-    private MutableLiveData<String> newsUrl = new MutableLiveData<>();
+    private MutableLiveData<String> mUrl = new MutableLiveData<>();
 
-    public void setNewsUrl(String url) {
-        if(!url.equals(newsUrl.getValue())) {
-            newsUrl.setValue(url);
+    public void setUrl(String url) {
+        if(!url.equals(mUrl.getValue())) {
+            mUrl.setValue(url);
         }
     }
 
-    public LiveData<String> getNewsUrl() {
-        return newsUrl;
+    public LiveData<String> getUrl() {
+        return mUrl;
     }
 
 }

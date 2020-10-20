@@ -1,11 +1,13 @@
 package com.icebuf.jetpackex.sample.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.library.baseAdapters.BR;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.icebuf.jetpackex.databinding.DBFragment;
 import com.icebuf.jetpackex.sample.R;
@@ -31,6 +33,13 @@ public class RecycleFragment extends DBFragment<RecycleViewModel> {
 //        RecyclerView recyclerView = view.findViewById(R.id.rv_news);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 //        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        SwipeRefreshLayout layout = view.findViewById(R.id.swl_layout);
+        layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getViewModel().requestTopNewsList(20);
+            }
+        });
         getViewModel().getTopNewsCount().observe(getViewLifecycleOwner(), new ResultObserver<Integer>() {
 
             @Override
@@ -41,11 +50,13 @@ public class RecycleFragment extends DBFragment<RecycleViewModel> {
 
             @Override
             protected boolean onSuccess(Integer data) {
+                Log.e(TAG, "onSuccess():: " + data);
                 if(data == null || data == 0) {
                     IceUtil.showToast(requireContext(), R.string.already_up_to_date);
                 } else {
                     IceUtil.showToast(requireContext(), getString(R.string.update_news_count, data));
                 }
+                layout.setRefreshing(false);
                 return true;
             }
 
@@ -53,11 +64,13 @@ public class RecycleFragment extends DBFragment<RecycleViewModel> {
             protected void onError(Integer data, String message) {
                 super.onError(data, message);
                 IceUtil.showToast(requireContext(), message);
+                layout.setRefreshing(false);
             }
         });
         if(getViewModel().getTopNews().isEmpty()) {
             getViewModel().requestTopNewsList(20);
         }
+
     }
 
     @Override

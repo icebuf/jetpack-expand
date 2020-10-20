@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
 
 import com.icebuf.jetpackex.sample.R;
+import com.icebuf.jetpackex.sample.constants.ViewModelConstants;
 import com.icebuf.jetpackex.sample.pojo.TianNewsEntity;
 import com.icebuf.jetpackex.sample.repo.TianRepository;
 import com.icebuf.jetpackex.viewmodel.Result;
@@ -49,7 +50,8 @@ public class RecycleViewModel extends ViewModel {
     public void onNewsItemClick(View view, int position) {
         String newsUrl = getTopNews().get(position).getUrl();
         Bundle bundle = new Bundle();
-        bundle.putString("url", newsUrl);
+        bundle.putString(ViewModelConstants.KEY_URL, newsUrl);
+//        Navigation.findNavController(view).navigate(Uri.EMPTY);
         Navigation.findNavController(view).navigate(R.id.action_recycleFragment_to_newsFragment, bundle);
     }
 

@@ -1,5 +1,10 @@
 package com.icebuf.jetpackex.sample.fragment;
 
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.Fragment;
 
@@ -12,6 +17,13 @@ import com.icebuf.jetpackex.sample.R;
  *
  */
 public class HomeFragment extends DBFragment<HomeViewModel> {
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+//        ActionBarUtil.setHomeAsUpIndicator();
+    }
 
     @Override
     protected int getVariableId() {

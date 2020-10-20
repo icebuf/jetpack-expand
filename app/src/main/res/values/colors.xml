@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
+    <color name="transparent">@android:color/transparent</color>
     <color name="red">#FF0000</color>
     <color name="blue">#00FF00</color>
     <color name="yellow">#0000FF</color>
@@ -11,4 +12,11 @@
     <color name="gray_light">#20323232</color>
     <color name="white">@android:color/white</color>
     <color name="black">@android:color/black</color>
+    <color name="themeBlue">#3B99FC</color>
+
+    <color name="codeBlockBackground">#222222</color>
+    <color name="codeText">#FFFFFF</color>
+    <color name="codeText2">#BF6426</color>
+    <color name="codeText3">#F6BB5A</color>
+    <color name="codeText4">#ACA72C</color>
 </resources>

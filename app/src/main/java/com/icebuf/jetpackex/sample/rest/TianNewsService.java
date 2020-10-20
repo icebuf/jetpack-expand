@@ -14,7 +14,7 @@ import retrofit2.http.Query;
  * Data: 2020/9/11
  * E-mail：bflyff@hotmail.com
  */
-public interface TianNewsApi extends TianApi{
+public interface TianNewsService extends TianService {
 
     @GET("topnews/index?&key=" + KEY)
     Observable<TianNewsResponse<TianNewsEntity>> getTopNews(@Query("num") int num);

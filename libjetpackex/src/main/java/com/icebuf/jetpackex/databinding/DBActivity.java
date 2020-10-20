@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModelProvider;
  */
 public abstract class DBActivity<VM extends ViewModel> extends AppCompatActivity {
 
+    protected final String TAG = getClass().getSimpleName();
+
     private ViewDataBinding mBinding;
     private VM mViewModel;
 

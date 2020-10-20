@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="#FFF6F6F6" />
+        </shape>
+    </item>
+
+    <item android:gravity="top" android:drawable="@drawable/bg_actionbar">
+
+    </item>
+</layer-list>

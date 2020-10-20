@@ -30,8 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@{vm.sex}"
-            app:textFormat="@{@string/xiaomin_sex}"/>
+            android:text="@{@string/xiaomin_sex(vm.sex)}" />
 
         <com.icebuf.jetpackex.widget.NestedRadioGroup
             android:layout_width="wrap_content"

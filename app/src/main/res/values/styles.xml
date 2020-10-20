@@ -7,4 +7,43 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Theme.Main" parent="AppTheme">
+        <item name="actionBarStyle">@style/Widget.MainActionBarStyle</item>
+        <item name="actionBarTheme">@style/Widget.Main.ActionBar</item>
+        <item name="drawerArrowStyle">@style/Widget.Main.DrawerArrowToggle</item>
+        <item name="actionBarSize">50dp</item>
+    </style>
+
+    <style name="Widget" />
+
+    <style name="Widget.MainActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
+
+        <item name="background">@drawable/bg_actionbar</item>
+        <item name="elevation">0dp</item>
+        <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Main</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title.Main">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Widget.Main.ActionBar"
+        parent="ThemeOverlay.AppCompat.ActionBar">
+<!--        <item name="elevation">0dp</item>-->
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="background">@drawable/bg_actionbar</item>
+    </style>
+
+    <style name="Widget.Main.DrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
+<!--        <item name="thickness">0dp</item>-->
+<!--        <item name="spinBars">false</item>-->
+<!--        <item name="gapBetweenBars">0dp</item>-->
+<!--        <item name="drawableSize">@dimen/dpi_150px</item>-->
+<!--        <item name="barLength">@dimen/dpi_2px</item>-->
+<!--        <item name="arrowHeadLength">@dimen/dpi_150px</item>-->
+<!--        <item name="arrowShaftLength">2dp</item>-->
+    </style>
+
 </resources>

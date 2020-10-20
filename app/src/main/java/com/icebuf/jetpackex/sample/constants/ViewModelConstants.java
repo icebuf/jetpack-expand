@@ -7,4 +7,7 @@ package com.icebuf.jetpackex.sample.constants;
  * E-mail：bflyff@hotmail.com
  */
 public class ViewModelConstants {
+
+    public static final String KEY_URL = "url";
+    public static final String KEY_ID = "id";
 }

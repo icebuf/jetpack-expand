@@ -6,7 +6,7 @@ package com.icebuf.jetpackex.sample.rest;
  * Data: 2020/9/11
  * E-mail：bflyff@hotmail.com
  */
-public interface TianApi {
+public interface TianService {
 
     String BASE_URL = "http://api.tianapi.com/";
 

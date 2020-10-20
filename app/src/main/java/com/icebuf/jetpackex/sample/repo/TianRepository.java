@@ -41,14 +41,16 @@ public class TianRepository {
 
     private static volatile TianRepository sInstance;
 
-    private TianRepository(TianDataSource dataSource, LocalDataSource localDataSource) {
-        mTianDataSource = dataSource;
-        mLocalDataSource = localDataSource;
+    private TianRepository(LocalDataSource local,
+                           TianDataSource remote) {
+        mLocalDataSource = local;
+        mTianDataSource = remote;
     }
 
-    public static TianRepository getInstance(TianDataSource dataSource, LocalDataSource localDataSource) {
+    public static TianRepository getInstance(LocalDataSource local,
+                                             TianDataSource remote) {
         if(sInstance == null) {
-            sInstance = new TianRepository(dataSource, localDataSource);
+            sInstance = new TianRepository(local, remote);
         }
         return sInstance;
     }
@@ -113,6 +115,8 @@ public class TianRepository {
                         } else if(mNewsList.size() < num) {
                             //本地有数据但是不够要刷新的
                             loadRemoteNews(num - mNewsList.size());
+                        } else {
+                            mTopNewsCount.setValue(Result.success(mNewsList.size()));
                         }
                     }
                 }));
