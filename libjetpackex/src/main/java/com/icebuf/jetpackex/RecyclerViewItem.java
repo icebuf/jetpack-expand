@@ -36,7 +36,14 @@ public @interface RecyclerViewItem {
      * @return xml布局文件的id
      */
     @LayoutRes
-    int layoutId();
+    int layoutId() default 0;
+
+    /**
+     * 布局的名称.
+     * 在module中无法使用变量的R文件的字段，因此使用名称动态查找
+     * @return 布局的名称.
+     */
+    String layout() default "";
 
     /**
      * 对应布局文件中的variable

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.icebuf.jetpackex.OnItemClickListener;
 import com.icebuf.jetpackex.OnItemLongClickListener;
-import com.icebuf.jetpackex.databinding.RecyclerViewAdapter;
+import com.icebuf.jetpackex.RecyclerViewAdapter;
 import com.icebuf.jetpackex.util.ReflectUtil;
 
 import java.util.List;

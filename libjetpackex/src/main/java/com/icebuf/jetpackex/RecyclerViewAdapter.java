@@ -1,4 +1,4 @@
-package com.icebuf.jetpackex.databinding;
+package com.icebuf.jetpackex;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
@@ -12,9 +12,6 @@ import androidx.databinding.ObservableList;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.icebuf.jetpackex.OnItemClickListener;
-import com.icebuf.jetpackex.OnItemLongClickListener;
-import com.icebuf.jetpackex.RecyclerViewItem;
 import com.icebuf.jetpackex.util.ReflectUtil;
 
 import java.lang.ref.WeakReference;
@@ -201,24 +198,54 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 return null;
             }
         }
-        if(item.layoutId() > 0 && item.variableId() > 0) {
+        int layoutId = getLayoutId(item);
+        int variableId = getVariableId(item);
+        if (layoutId > 0 && variableId > 0) {
             mItemAnnMap.put(object.getClass(), item);
-            return new ObjectItem(object, item.layoutId(), item.variableId(), item.objectId());
+            return new ObjectItem(object, layoutId, variableId, item.objectId());
         }
-        if(item.layoutId() > 0 &&!TextUtils.isEmpty(item.variable())) {
-            int variableId = getVariableId(item.variable());
-            if(variableId > 0) {
-                mItemAnnMap.put(object.getClass(), item);
-                return new ObjectItem(object, item.layoutId(), variableId, item.objectId());
-            }
-        }
+//        if(item.layoutId() > 0 && item.variableId() > 0) {
+//            mItemAnnMap.put(object.getClass(), item);
+//            return new ObjectItem(object, item.layoutId(), item.variableId(), item.objectId());
+//        }
+//        if(item.layoutId() > 0 &&!TextUtils.isEmpty(item.variable())) {
+//            int variableId = getVariableId(item.variable());
+//            if(variableId > 0) {
+//                mItemAnnMap.put(object.getClass(), item);
+//                return new ObjectItem(object, item.layoutId(), variableId, item.objectId());
+//            }
+//        }
         throw new RuntimeException("Invalid params for annotation "
                 + RecyclerViewItem.class.getName()
                 + " in " + object.getClass().getName());
     }
 
-    private static int getVariableId(String variable) {
-        if(BR_CLASS == null) {
+    private static int getLayoutId(RecyclerViewItem item) {
+        int id = item.layoutId();
+        if (id > 0) {
+            return item.layoutId();
+        }
+        if (TextUtils.isEmpty(item.layout())) {
+            return 0;
+        }
+        Class<?> clazz = R.layout.class;
+        try {
+            Field field = clazz.getDeclaredField(item.layout());
+            return field.getInt(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private static int getVariableId(RecyclerViewItem item) {
+        if (item.variableId() > 0) {
+            return item.variableId();
+        }
+        if (TextUtils.isEmpty(item.variable())) {
+            return 0;
+        }
+        if (BR_CLASS == null) {
             try {
                 BR_CLASS = Class.forName(DEFAULT_BR);
             } catch (ClassNotFoundException e) {
@@ -226,12 +253,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         }
         try {
-            Field field = BR_CLASS.getField(variable);
-            if(!field.isAccessible()) {
+            Field field = BR_CLASS.getField(item.variable());
+            if (!field.isAccessible()) {
                 field.setAccessible(true);
             }
             return (int) field.get(null);
-        } catch (NoSuchFieldException | IllegalAccessException ignore) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
         return 0;
     }

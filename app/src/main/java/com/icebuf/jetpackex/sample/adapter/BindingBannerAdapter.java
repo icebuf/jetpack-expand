@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingListener;
 
-import com.icebuf.jetpackex.databinding.RecyclerViewAdapter;
+import com.icebuf.jetpackex.RecyclerViewAdapter;
 import com.icebuf.jetpackex.sample.R;
 import com.icebuf.jetpackex.util.ReflectUtil;
 import com.zhpan.bannerview.BannerViewPager;
