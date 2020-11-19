@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
  * E-mail：bflyff@hotmail.com
  *
  * 通过注解方式提供RecyclerView的Item对象
+ * id的优先级高于名称查找
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -40,7 +41,7 @@ public @interface RecyclerViewItem {
 
     /**
      * 布局的名称.
-     * 在module中无法使用变量的R文件的字段，因此使用名称动态查找
+     * 因在module中无法使用变量的BR文件的字段，可使用此名称动态查找
      * @return 布局的名称.
      */
     String layout() default "";
@@ -56,7 +57,7 @@ public @interface RecyclerViewItem {
 
     /**
      * 对应布局文件中的<code>variable</code>标签的<code>name</code>字段
-     *
+     * 因在module中无法使用变量的BR文件的字段，可使用此名称动态查找
      * @return 布局文件中variable的名称
      */
     String variable() default "";
@@ -64,9 +65,16 @@ public @interface RecyclerViewItem {
     /**
      * 如果item内部会对viewModel操作，请使用此id
      * 这样item的布局内部可以使用viewModel进行操作了
-     * @return dataBinding生成的布局文件种variable对应的id
+     * @return dataBinding生成的布局文件中variable对应的id
      * @see androidx.databinding.library.baseAdapters.BR
      */
-    int objectId() default 0;
+    int tagId() default 0;
+
+    /**
+     * 放入item布局文件中的自定义对象的variable名称
+     * 因在module中无法使用变量的BR文件的字段，可使用此名称动态查找
+     * @return 自定义对象的variable名称
+     */
+    String tag() default "";
 
 }

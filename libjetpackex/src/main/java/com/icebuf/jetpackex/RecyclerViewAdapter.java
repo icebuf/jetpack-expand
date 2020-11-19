@@ -52,6 +52,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private Object mTag;
 
+    private String mPackageName;
+
     private ItemClickHandler mItemClickHandler = new ItemClickHandler(this);
 
     public RecyclerViewAdapter(@NonNull List<?> items) {
@@ -64,6 +66,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ViewDataBinding binding = DataBindingUtil.inflate(inflater,
                 viewType, parent, false);
+        mPackageName = parent.getContext().getPackageName();
         return new BindingHolder(binding);
     }
 
@@ -176,7 +179,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
         BindingItem item = mItemMap.get(object);
         if(item == null) {
-            item = getItemFormAnnotation(object);
+            item = getItemFormAnnotation(object, mPackageName);
             if(item == null) {
                 throw new RuntimeException("You must implement " + BindingItem.class.getName()
                         + " or use annotation " + RecyclerViewItem.class.getName());
@@ -187,7 +190,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @SuppressLint("ResourceType")
-    private static BindingItem getItemFormAnnotation(Object object) {
+    private static BindingItem getItemFormAnnotation(Object object, String pkgName) {
         if(mItemAnnMap == null) {
             mItemAnnMap = new HashMap<>();
         }
@@ -198,29 +201,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 return null;
             }
         }
-        int layoutId = getLayoutId(item);
-        int variableId = getVariableId(item);
+        int layoutId = getLayoutId(item, pkgName);
+        int variableId = getVariableId(item.variableId(), item.variable());
+        int tagId = getVariableId(item.tagId(), item.tag());
         if (layoutId > 0 && variableId > 0) {
             mItemAnnMap.put(object.getClass(), item);
-            return new ObjectItem(object, layoutId, variableId, item.objectId());
+            return new ObjectItem(object, layoutId, variableId, tagId);
         }
-//        if(item.layoutId() > 0 && item.variableId() > 0) {
-//            mItemAnnMap.put(object.getClass(), item);
-//            return new ObjectItem(object, item.layoutId(), item.variableId(), item.objectId());
-//        }
-//        if(item.layoutId() > 0 &&!TextUtils.isEmpty(item.variable())) {
-//            int variableId = getVariableId(item.variable());
-//            if(variableId > 0) {
-//                mItemAnnMap.put(object.getClass(), item);
-//                return new ObjectItem(object, item.layoutId(), variableId, item.objectId());
-//            }
-//        }
         throw new RuntimeException("Invalid params for annotation "
                 + RecyclerViewItem.class.getName()
                 + " in " + object.getClass().getName());
     }
 
-    private static int getLayoutId(RecyclerViewItem item) {
+    private static int getLayoutId(RecyclerViewItem item, String pkgName) {
         int id = item.layoutId();
         if (id > 0) {
             return item.layoutId();
@@ -228,21 +221,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (TextUtils.isEmpty(item.layout())) {
             return 0;
         }
-        Class<?> clazz = R.layout.class;
         try {
+            Class<?> clazz = Class.forName(pkgName + "R.layout");
             Field field = clazz.getDeclaredField(item.layout());
             return field.getInt(null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return 0;
     }
 
-    private static int getVariableId(RecyclerViewItem item) {
-        if (item.variableId() > 0) {
-            return item.variableId();
+    private static int getVariableId(int variableId, String variable) {
+        if (variableId > 0) {
+            return variableId;
         }
-        if (TextUtils.isEmpty(item.variable())) {
+        if (TextUtils.isEmpty(variable)) {
             return 0;
         }
         if (BR_CLASS == null) {
@@ -253,7 +246,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         }
         try {
-            Field field = BR_CLASS.getField(item.variable());
+            Field field = BR_CLASS.getField(variable);
             if (!field.isAccessible()) {
                 field.setAccessible(true);
             }
@@ -319,13 +312,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     static class ObjectItem implements BindingItem {
 
-        private Object object;
+        private final Object object;
 
-        private int viewType;
+        private final int viewType;
 
-        private int variableId;
+        private final int variableId;
 
-        private int tagId;
+        private final int tagId;
 
         public ObjectItem(Object object, int viewType, int variableId, int tagId) {
             this.object = object;

@@ -88,7 +88,7 @@ public class ArticleFragment extends DBFragment<ArticleViewModel> {
         super.onStart();
 
         StatusBarUtil.setTranslucentStatus(requireActivity());
-        StatusBarUtil.setStatusBarDarkTheme(requireActivity(), true);
+        StatusBarUtil.setSupportSystemUiDark(requireActivity(), true);
         ActionBarUtil.with(requireActivity()).hide();
 
         View view = requireActivity().findViewById(R.id.fl_main);
