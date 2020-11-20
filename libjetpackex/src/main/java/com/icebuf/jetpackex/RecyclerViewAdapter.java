@@ -222,7 +222,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return 0;
         }
         try {
-            Class<?> clazz = Class.forName(pkgName + "R.layout");
+            Class<?> clazz = Class.forName(pkgName + ".R$layout");
             Field field = clazz.getDeclaredField(item.layout());
             return field.getInt(null);
         } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException e) {
@@ -250,7 +250,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             if (!field.isAccessible()) {
                 field.setAccessible(true);
             }
-            return (int) field.get(null);
+            return field.getInt(null);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
