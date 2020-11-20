@@ -35,7 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     /**
      * DataBinding编译生成BR资源类
      * @see androidx.databinding.library.baseAdapters.BR
-     * <code>你的项目包名.BR></>
+     * <code>你的项目包名.BR></code>
      */
     public static Class<?> BR_CLASS;
 
@@ -359,32 +359,42 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void onChanged(ObservableList<T> sender) {
-            mAdapter.get().notifyDataSetChanged();
+            if (mAdapter.get() != null) {
+                mAdapter.get().notifyDataSetChanged();
+            }
         }
 
         @Override
         public void onItemRangeChanged(ObservableList<T> sender,
                                        int positionStart, int itemCount) {
-            mAdapter.get().notifyItemRangeChanged(positionStart, itemCount);
+            if (mAdapter.get() != null) {
+                mAdapter.get().notifyItemRangeChanged(positionStart, itemCount);
+            }
         }
 
         @Override
         public void onItemRangeInserted(ObservableList<T> sender,
                                         int positionStart, int itemCount) {
-            mAdapter.get().notifyItemRangeInserted(positionStart, itemCount);
+            if (mAdapter.get() != null) {
+                mAdapter.get().notifyItemRangeInserted(positionStart, itemCount);
+            }
         }
 
         @Override
         public void onItemRangeMoved(ObservableList<T> sender,
                                      int fromPosition, int toPosition, int itemCount) {
-            mAdapter.get().notifyItemRangeChanged(fromPosition, itemCount);
-            mAdapter.get().notifyItemRangeChanged(toPosition, itemCount);
+            if (mAdapter.get() != null) {
+                mAdapter.get().notifyItemRangeChanged(fromPosition, itemCount);
+                mAdapter.get().notifyItemRangeChanged(toPosition, itemCount);
+            }
         }
 
         @Override
         public void onItemRangeRemoved(ObservableList<T> sender,
                                        int positionStart, int itemCount) {
-            mAdapter.get().notifyItemRangeRemoved(positionStart, itemCount);
+            if (mAdapter.get() != null) {
+                mAdapter.get().notifyItemRangeRemoved(positionStart, itemCount);
+            }
         }
     }
 }

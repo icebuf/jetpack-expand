@@ -8,6 +8,7 @@ import com.icebuf.jetpackex.sample.pojo.GankArticleEntity;
 import com.icebuf.jetpackex.sample.pojo.GankBannerEntity;
 import com.icebuf.jetpackex.sample.pojo.GankDataEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -66,7 +67,14 @@ public class GankRepository {
         mDisposable.add(mGankDataSource.getData(category, type, page, count)
                 .subscribe(gankResponse -> {
                     if (gankResponse.getStatus() == 100) {
-                        mDataList.clear();
+                        //定义一个集合保存将要添加的全部命令id
+                        List<GankDataEntity> allComIdList = new ArrayList<>();
+                        //这种赋值方法，原集合的改变不会影响
+                        allComIdList.addAll(gankResponse.getData());
+                        //取两个集合的交集 comIdList为两个集合的交集
+                        allComIdList.retainAll(mDataList);
+                        //去掉两个集合的交集，就为需要添加的指令Ids
+                        gankResponse.getData().removeAll(allComIdList);
                         mDataList.addAll(gankResponse.getData());
 //                        Log.e("TAG", Arrays.toString(mDataList.toArray()));
                     }
