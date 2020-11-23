@@ -3,6 +3,7 @@ package com.icebuf.jetpackex.util;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -87,20 +88,70 @@ public class ReflectUtil {
         return false;
     }
 
-    private static <T> T get(T t, Field field) {
+    public static <T> T get(Object obj, Field field) {
         if(field == null) {
             return null;
         }
         accessible(field);
         try {
-            return cast(field.get(t));
+            return cast(field.get(obj));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private static boolean getBoolean(Object object, Field field) {
+    public static int getInt(String clazzName, String fieldName) {
+        try {
+            Class<?> clazz = Class.forName(clazzName);
+            return getInt(clazz, fieldName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int getDeclaredInt(String clazzName, String fieldName) {
+        try {
+            Class<?> clazz = Class.forName(clazzName);
+            return getDeclaredInt(clazz, fieldName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int getInt(Class<?> clazz, String fieldName) {
+        try {
+            Field field = clazz.getField(fieldName);
+            return getInt(null, field);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int getDeclaredInt(Class<?> clazz, String fieldName) {
+        try {
+            Field field = clazz.getDeclaredField(fieldName);
+            return getInt(null, field);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int getInt(Object object, Field field) {
+        accessible(field);
+        try {
+            return field.getInt(object);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static boolean getBoolean(Object object, Field field) {
         accessible(field);
         try {
             return field.getBoolean(object);

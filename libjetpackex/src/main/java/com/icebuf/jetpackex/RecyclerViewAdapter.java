@@ -54,7 +54,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private String mPackageName;
 
-    private ItemClickHandler mItemClickHandler = new ItemClickHandler(this);
+    private final ItemClickHandler mItemClickHandler = new ItemClickHandler(this);
 
     public RecyclerViewAdapter(@NonNull List<?> items) {
         this.mItems = items;
@@ -75,7 +75,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         super.onAttachedToRecyclerView(recyclerView);
 
         if(mItems instanceof ObservableList) {
-            ObservableList<Object> list = (ObservableList<Object>) mItems;
+            ObservableList<Object> list = ReflectUtil.cast(mItems);
             if(mCallback == null) {
                 mCallback = new ObservableListCallback<>(this);
             }
@@ -88,7 +88,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         super.onDetachedFromRecyclerView(recyclerView);
 
         if(mItems instanceof ObservableList) {
-            ObservableList<Object> list = (ObservableList<Object>) mItems;
+            ObservableList<Object> list = ReflectUtil.cast(mItems);
             list.removeOnListChangedCallback(mCallback);
             mCallback = null;
         }
@@ -107,15 +107,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    static class ItemClickHandler implements View.OnClickListener, View.OnLongClickListener {
+    static class ItemClickHandler implements View.OnClickListener,
+            View.OnLongClickListener, View.OnFocusChangeListener {
 
         private static final int KEY_POSITION = -1001;
 
-        private WeakReference<RecyclerViewAdapter> mAdapter;
+        private final WeakReference<RecyclerViewAdapter> mAdapter;
 
         private OnItemClickListener mClickListener;
 
         private OnItemLongClickListener mLongClickListener;
+
+        private OnItemFocusListener mFocusChangedListener;
 
         public ItemClickHandler(RecyclerViewAdapter adapter) {
             mAdapter = new WeakReference<>(adapter);
@@ -127,6 +130,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public void setOnItemLongClickListener(OnItemLongClickListener listener) {
             this.mLongClickListener = listener;
+        }
+
+        public void setOnItemFocusChangedListener(OnItemFocusListener listener) {
+            mFocusChangedListener = listener;
         }
 
         public void bindHolder(RecyclerView.ViewHolder holder) {
@@ -157,6 +164,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 return mLongClickListener.onItemLongClick(mAdapter.get(), v, position);
             }
             return false;
+        }
+
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if(mFocusChangedListener != null) {
+                int position = (int) v.getTag(KEY_POSITION);
+                mFocusChangedListener.onItemFocusChanged(mAdapter.get(), v, position, hasFocus);
+            }
         }
     }
 
@@ -221,14 +236,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (TextUtils.isEmpty(item.layout())) {
             return 0;
         }
-        try {
-            Class<?> clazz = Class.forName(pkgName + ".R$layout");
-            Field field = clazz.getDeclaredField(item.layout());
-            return field.getInt(null);
-        } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return ReflectUtil.getInt(pkgName + ".R$layout", item.layout());
     }
 
     private static int getVariableId(int variableId, String variable) {
@@ -245,16 +253,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 throw new RuntimeException(e.getMessage());
             }
         }
-        try {
-            Field field = BR_CLASS.getField(variable);
-            if (!field.isAccessible()) {
-                field.setAccessible(true);
-            }
-            return field.getInt(null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return ReflectUtil.getInt(BR_CLASS, variable);
     }
 
     @Override
@@ -273,6 +272,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mItemClickHandler.setOnItemLongClickListener(listener);
+    }
+
+    public void setOnItemFocusChangedListener(OnItemFocusListener listener) {
+        mItemClickHandler.setOnItemFocusChangedListener(listener);
     }
 
     public void setTag(Object object) {
@@ -351,7 +354,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     static class ObservableListCallback<T> extends
             ObservableList.OnListChangedCallback<ObservableList<T>> {
 
-        private WeakReference<RecyclerViewAdapter> mAdapter;
+        private final WeakReference<RecyclerViewAdapter> mAdapter;
 
         public ObservableListCallback(RecyclerViewAdapter adapter) {
             mAdapter = new WeakReference<>(adapter);
