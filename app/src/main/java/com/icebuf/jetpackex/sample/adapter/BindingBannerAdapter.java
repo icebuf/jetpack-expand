@@ -1,5 +1,6 @@
 package com.icebuf.jetpackex.sample.adapter;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,8 +28,8 @@ public class BindingBannerAdapter<T, VH extends BindingBannerAdapter.BindingHold
 
     private RecyclerViewAdapter mAdapter;
 
-    public BindingBannerAdapter() {
-        mAdapter = new RecyclerViewAdapter(mList);
+    public BindingBannerAdapter(Context context) {
+        mAdapter = new RecyclerViewAdapter(context, mList);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class BindingBannerAdapter<T, VH extends BindingBannerAdapter.BindingHold
         if(adapter instanceof BindingBannerAdapter) {
             view.refreshData(data);
         } else if(adapter == null) {
-            view.setAdapter((BaseBannerAdapter<T, VH>) new BindingBannerAdapter<>());
+            view.setAdapter((BaseBannerAdapter<T, VH>) new BindingBannerAdapter<>(view.getContext()));
             view.create(data);
         }
     }

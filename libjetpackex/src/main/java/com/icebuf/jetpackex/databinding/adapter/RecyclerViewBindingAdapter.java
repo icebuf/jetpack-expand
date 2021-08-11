@@ -129,21 +129,21 @@ public class RecyclerViewBindingAdapter {
      */
     @BindingAdapter(value = "adapterDataSet")
     public static <T> void setAdapterDataSet(RecyclerView view, List<T> data) {
-        RecyclerView.Adapter<?> adapter = view.getAdapter();
-        if(adapter instanceof RecyclerViewAdapter) {
-            RecyclerViewAdapter recyclerViewAdapter = (RecyclerViewAdapter) adapter;
+        RecyclerView.Adapter<?> currAdapter = view.getAdapter();
+        if(currAdapter instanceof RecyclerViewAdapter) {
+            RecyclerViewAdapter recyclerViewAdapter = (RecyclerViewAdapter) currAdapter;
             recyclerViewAdapter.updateDataSet(data);
         } else {
-            RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(data);
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(view.getContext(), data);
             OnItemClickListener clickListener = (OnItemClickListener) view.getTag(KEY_ITEM_CLICK);
             OnItemLongClickListener longClickListener =
                     (OnItemLongClickListener) view.getTag(KEY_ITEM_LONG_CLICK);
             OnItemFocusListener focusListener =
                     (OnItemFocusListener) view.getTag(KEY_ITEM_FOCUS_CHANGED);
-            recyclerViewAdapter.setOnItemClickListener(clickListener);
-            recyclerViewAdapter.setOnItemLongClickListener(longClickListener);
-            recyclerViewAdapter.setOnItemFocusChangedListener(focusListener);
-            view.setAdapter(recyclerViewAdapter);
+            adapter.setOnItemClickListener(clickListener);
+            adapter.setOnItemLongClickListener(longClickListener);
+            adapter.setOnItemFocusListener(focusListener);
+            view.setAdapter(adapter);
         }
     }
 
@@ -232,7 +232,7 @@ public class RecyclerViewBindingAdapter {
             view.setTag(KEY_ITEM_FOCUS_CHANGED, listener);
         } else if(adapter instanceof RecyclerViewAdapter) {
             RecyclerViewAdapter recyclerViewAdapter = (RecyclerViewAdapter) adapter;
-            recyclerViewAdapter.setOnItemFocusChangedListener(listener);
+            recyclerViewAdapter.setOnItemFocusListener(listener);
         }
     }
 

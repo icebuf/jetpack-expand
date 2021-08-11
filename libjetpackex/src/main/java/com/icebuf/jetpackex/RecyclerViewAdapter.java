@@ -1,6 +1,7 @@
 package com.icebuf.jetpackex;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author IceTang
@@ -33,16 +35,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public static final String DEFAULT_BR = "androidx.databinding.library.baseAdapters.BR";
 
     /**
-     * DataBinding编译生成BR资源类
+     * DataBinding编译生成BR资源类.
      * @see androidx.databinding.library.baseAdapters.BR
      * <code>你的项目包名.BR></code>
      */
     public static Class<?> BR_CLASS;
 
     /**
-     * 缓存带有注解的类
+     * 缓存带有注解的类.
      */
-    private volatile static Map<Class<?>, RecyclerViewItem> mItemAnnMap;
+    private static volatile Map<Class<?>, RecyclerViewItem> mItemAnnMap;
 
     private List<?> mItems;
 
@@ -54,19 +56,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private String mPackageName;
 
-    private final ItemClickHandler mItemClickHandler = new ItemClickHandler(this);
+    private ItemListenerHandler mItemListenerHandler = new ItemListenerHandler(this);
 
-    public RecyclerViewAdapter(@NonNull List<?> items) {
+    private OnItemBindListener mItemBindListener;
+
+    public RecyclerViewAdapter(@NonNull Context context, @NonNull List<?> items) {
+        mPackageName = context.getPackageName();
         this.mItems = items;
     }
 
     @NonNull
     @Override
     public BindingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
         ViewDataBinding binding = DataBindingUtil.inflate(inflater,
                 viewType, parent, false);
-        mPackageName = parent.getContext().getPackageName();
         return new BindingHolder(binding);
     }
 
@@ -74,9 +79,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
 
-        if(mItems instanceof ObservableList) {
-            ObservableList<Object> list = ReflectUtil.cast(mItems);
-            if(mCallback == null) {
+        if (mItems instanceof ObservableList) {
+            ObservableList<Object> list = ReflectUtil.cast(mItems);;
+            if (mCallback == null) {
                 mCallback = new ObservableListCallback<>(this);
             }
             list.addOnListChangedCallback(mCallback);
@@ -87,7 +92,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
 
-        if(mItems instanceof ObservableList) {
+        if (mItems instanceof ObservableList<?>) {
             ObservableList<Object> list = ReflectUtil.cast(mItems);
             list.removeOnListChangedCallback(mCallback);
             mCallback = null;
@@ -96,21 +101,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull BindingHolder holder, int position) {
-        mItemClickHandler.bindHolder(holder);
+        mItemListenerHandler.bindHolder(holder);
         holder.bindItem(getItem(mItems.get(position)), mTag);
+        if (mItemBindListener != null) {
+            mItemBindListener.onItemBind(holder.binding, position, mTag);
+        }
     }
 
     public <T> void updateDataSet(List<T> data) {
-        if(mItems != data) {
+        if (mItems != data) {
             mItems = data;
             notifyDataSetChanged();
         }
     }
 
-    static class ItemClickHandler implements View.OnClickListener,
+    public void setOnItemBindListener(OnItemBindListener listener) {
+        mItemBindListener = listener;
+    }
+
+    static class ItemListenerHandler implements View.OnClickListener,
             View.OnLongClickListener, View.OnFocusChangeListener {
 
-        private static final int KEY_POSITION = -1001;
+        private static final int KEY_HOLDER = -1001;
 
         private final WeakReference<RecyclerViewAdapter> mAdapter;
 
@@ -118,9 +130,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         private OnItemLongClickListener mLongClickListener;
 
-        private OnItemFocusListener mFocusChangedListener;
+        private OnItemFocusListener mFocusListener;
 
-        public ItemClickHandler(RecyclerViewAdapter adapter) {
+        public ItemListenerHandler(RecyclerViewAdapter adapter) {
             mAdapter = new WeakReference<>(adapter);
         }
 
@@ -132,45 +144,56 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.mLongClickListener = listener;
         }
 
-        public void setOnItemFocusChangedListener(OnItemFocusListener listener) {
-            mFocusChangedListener = listener;
+        public void setOnItemFocusListener(OnItemFocusListener listener) {
+            this.mFocusListener = listener;
         }
 
         public void bindHolder(RecyclerView.ViewHolder holder) {
             View view = holder.itemView;
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            view.setTag(KEY_POSITION, holder.getAdapterPosition());
+            view.setOnFocusChangeListener(this);
+            view.setTag(KEY_HOLDER, holder);
         }
 
         public void unbindHolder(RecyclerView.ViewHolder holder) {
             View view = holder.itemView;
             view.setOnClickListener(null);
             view.setOnLongClickListener(null);
+            view.setOnFocusChangeListener(null);
+            view.setTag(KEY_HOLDER, null);
         }
 
         @Override
         public void onClick(View v) {
-            if(mClickListener != null) {
-                int position = (int) v.getTag(KEY_POSITION);
+            if (mClickListener != null) {
+                int position = getPosition(v);
                 mClickListener.onItemClick(mAdapter.get(), v, position);
             }
         }
 
+
+        private int getPosition(View v) {
+            RecyclerView.ViewHolder holder = (RecyclerView.ViewHolder) v.getTag(KEY_HOLDER);
+            return holder.getAdapterPosition();
+        }
+
+
         @Override
         public boolean onLongClick(View v) {
-            if(mLongClickListener != null) {
-                int position = (int) v.getTag(KEY_POSITION);
+            if (mLongClickListener != null) {
+                int position = getPosition(v);
                 return mLongClickListener.onItemLongClick(mAdapter.get(), v, position);
             }
             return false;
         }
 
+
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if(mFocusChangedListener != null) {
-                int position = (int) v.getTag(KEY_POSITION);
-                mFocusChangedListener.onItemFocusChanged(mAdapter.get(), v, position, hasFocus);
+            if (mFocusListener != null) {
+                int position = getPosition(v);
+                mFocusListener.onItemFocusChanged(mAdapter.get(), v, position, hasFocus);
             }
         }
     }
@@ -179,23 +202,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onViewRecycled(@NonNull BindingHolder holder) {
         super.onViewRecycled(holder);
 
-        mItemClickHandler.unbindHolder(holder);
+        mItemListenerHandler.unbindHolder(holder);
     }
 
     private BindingItem getItem(Object object) {
-        if(object instanceof BindingItem) {
+        if (object instanceof BindingItem) {
             return (BindingItem) object;
         }
-        if(object == null) {
+        if (object == null) {
             throw new NullPointerException();
         }
-        if(mItemMap == null) {
+        if (mItemMap == null) {
             mItemMap = new HashMap<>();
         }
         BindingItem item = mItemMap.get(object);
-        if(item == null) {
+        if (item == null) {
             item = getItemFormAnnotation(object, mPackageName);
-            if(item == null) {
+            if (item == null) {
                 throw new RuntimeException("You must implement " + BindingItem.class.getName()
                         + " or use annotation " + RecyclerViewItem.class.getName());
             }
@@ -206,13 +229,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @SuppressLint("ResourceType")
     private static BindingItem getItemFormAnnotation(Object object, String pkgName) {
-        if(mItemAnnMap == null) {
+        if (mItemAnnMap == null) {
             mItemAnnMap = new HashMap<>();
         }
         RecyclerViewItem item = mItemAnnMap.get(object.getClass());
-        if(item == null) {
+        if (item == null) {
             item = ReflectUtil.getAnnotation(object.getClass(), RecyclerViewItem.class);
-            if(item == null) {
+            if (item == null) {
                 return null;
             }
         }
@@ -236,7 +259,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (TextUtils.isEmpty(item.layout())) {
             return 0;
         }
-        return ReflectUtil.getInt(pkgName + ".R$layout", item.layout());
+        try {
+            Class<?> clazz = Class.forName(pkgName + ".R$layout");
+            Field field = clazz.getDeclaredField(item.layout());
+            return field.getInt(null);
+        } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private static int getVariableId(int variableId, String variable) {
@@ -253,29 +283,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 throw new RuntimeException(e.getMessage());
             }
         }
-        return ReflectUtil.getInt(BR_CLASS, variable);
+        try {
+            Field field = BR_CLASS.getField(variable);
+            if (!field.isAccessible()) {
+                field.setAccessible(true);
+            }
+            return (int) field.get(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mItems == null ? 0 : mItems.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return getItem(mItems.get(position)).getViewType();
+        return mItems == null ? 0 : getItem(mItems.get(position)).getViewType();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
-        mItemClickHandler.setOnItemClickListener(listener);
+        mItemListenerHandler.setOnItemClickListener(listener);
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
-        mItemClickHandler.setOnItemLongClickListener(listener);
+        mItemListenerHandler.setOnItemLongClickListener(listener);
     }
 
-    public void setOnItemFocusChangedListener(OnItemFocusListener listener) {
-        mItemClickHandler.setOnItemFocusChangedListener(listener);
+    public void setOnItemFocusListener(OnItemFocusListener listener) {
+        mItemListenerHandler.setOnItemFocusListener(listener);
     }
 
     public void setTag(Object object) {
@@ -292,16 +331,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public void bindItem(BindingItem item, Object tag) {
-            if(item instanceof ObjectItem) {
+            if (item instanceof ObjectItem) {
                 ObjectItem objectItem = (ObjectItem) item;
                 binding.setVariable(item.getVariableId(), objectItem.getObject());
             } else {
                 binding.setVariable(item.getVariableId(), item);
             }
-            if(tag != null) {
+            if (tag != null) {
                 binding.setVariable(item.getTagId(), tag);
             }
         }
+    }
+
+    public interface OnItemBindListener {
+        void onItemBind(ViewDataBinding bind, int position, Object tag);
     }
 
     public interface BindingItem {
@@ -362,41 +405,43 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void onChanged(ObservableList<T> sender) {
-            if (mAdapter.get() != null) {
-                mAdapter.get().notifyDataSetChanged();
-            }
+            mAdapter.get().notifyDataSetChanged();
         }
 
         @Override
         public void onItemRangeChanged(ObservableList<T> sender,
                                        int positionStart, int itemCount) {
-            if (mAdapter.get() != null) {
-                mAdapter.get().notifyItemRangeChanged(positionStart, itemCount);
+            RecyclerViewAdapter adapter = mAdapter.get();
+            if (adapter != null) {
+                adapter.notifyItemRangeChanged(positionStart, itemCount);
             }
         }
 
         @Override
         public void onItemRangeInserted(ObservableList<T> sender,
                                         int positionStart, int itemCount) {
-            if (mAdapter.get() != null) {
-                mAdapter.get().notifyItemRangeInserted(positionStart, itemCount);
+            RecyclerViewAdapter adapter = mAdapter.get();
+            if (adapter != null) {
+                adapter.notifyItemRangeInserted(positionStart, itemCount);
             }
         }
 
         @Override
         public void onItemRangeMoved(ObservableList<T> sender,
                                      int fromPosition, int toPosition, int itemCount) {
-            if (mAdapter.get() != null) {
-                mAdapter.get().notifyItemRangeChanged(fromPosition, itemCount);
-                mAdapter.get().notifyItemRangeChanged(toPosition, itemCount);
+            RecyclerViewAdapter adapter = mAdapter.get();
+            if (adapter != null) {
+                adapter.notifyItemRangeChanged(fromPosition, itemCount);
+                adapter.notifyItemRangeChanged(toPosition, itemCount);
             }
         }
 
         @Override
         public void onItemRangeRemoved(ObservableList<T> sender,
                                        int positionStart, int itemCount) {
-            if (mAdapter.get() != null) {
-                mAdapter.get().notifyItemRangeRemoved(positionStart, itemCount);
+            RecyclerViewAdapter adapter = mAdapter.get();
+            if (adapter != null) {
+                adapter.notifyItemRangeRemoved(positionStart, itemCount);
             }
         }
     }

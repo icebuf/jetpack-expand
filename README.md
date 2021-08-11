@@ -7,7 +7,7 @@
 ## 导入依赖
 
 ```gradle
-    implementation 'com.github.icebuf:jetpack-ex:0.0.2'
+    implementation 'com.github.icebuf:jetpack-ex:0.0.5'
 ```
 
 ## 万能RecyclerView适配器

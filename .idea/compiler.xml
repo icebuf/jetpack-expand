@@ -21,6 +21,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="jetpack-expand.app" target="11" />
+      <module name="jetpack-expand.libjetpackex" target="11" />
       <module name="libtestcase" target="1.7" />
       <module name="libtestcaseprocessor" target="1.7" />
     </bytecodeTargetLevel>
